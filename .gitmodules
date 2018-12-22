@@ -1,0 +1,6 @@
+[submodule "src/strings"]
+	path = src/strings
+	url = https://github.com/psaajc1420/custom-strings.git
+[submodule "src/linked-lists"]
+	path = src/linked-lists
+	url = https://github.com/psaajc1420/linked-lists.git
