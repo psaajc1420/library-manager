@@ -36,7 +36,8 @@ LibraryManager::LibraryManager(std::string file_name) {
 
 void LibraryManager::ReadFile() {
 
-  int pages, height, width;
+  int pages, edition;
+  float length, width, height;
   int month, day, year;
   std::string title, type;
   std::string author_last_name, author_first_name;
@@ -47,12 +48,12 @@ void LibraryManager::ReadFile() {
     std::istringstream iss(line);
     iss >> type;
     if(type == "A"){
-      iss >> width >> height >> pages;
+      iss >> length >> width >> height >> pages >> edition;
       iss >> author_last_name >> author_first_name;
       std::getline(iss, title);
       title = title.substr(1);
       author_name = author_first_name + " " + author_last_name; 
-      Book book(pages, height, width, title, author_name);
+      Book book(pages, length, width, height, title, author_name);
       AddRecord(book);
     } else if(type == "L") {
       iss >> borrower_last_name >> borrower_first_name;
@@ -72,7 +73,7 @@ void LibraryManager::ReadFile() {
     }
   }
 
-  book_shelf_.Sort();
+  book_shelf_.Sort(BookOrder);
   loaned_books_.Sort();
 }
 
@@ -131,8 +132,9 @@ void LibraryManager::WriteFile() {
     book = *it;
     outfile_ << i << ". ";
     outfile_ << book.GetTitle() << " by " << book.GetAuthorName();
-    outfile_ << " (" << book.GetHeight() << "x" << book.GetWidth() << ", ";
-    outfile_ << book.GetPages() << " p)" << std::endl;
+    outfile_ << "(" << book.GetLength() << "x" << book.GetWidth();
+    outfile_ << "x" << book.GetHeight() << " in., ";
+    outfile_ << book.GetPages() << " pp.)" << std::endl;
     i++;
   }
   outfile_ << std::endl << std::endl;
@@ -155,9 +157,16 @@ void LibraryManager::WriteFile() {
     }
     outfile_ << i << ". ";
     outfile_ << book.GetTitle() << " by " << book.GetAuthorName();
-    outfile_ << " (" << book.GetHeight() << "x" << book.GetWidth() << ", ";
-    outfile_ << book.GetPages() << " p)" << std::endl;
+    outfile_ << "(" << book.GetLength() << "x" << book.GetWidth();
+    outfile_ << "x" << book.GetHeight() << " in., ";
+    outfile_ << book.GetPages() << " pp.)" << std::endl;
     previous_date = book.GetDate().GetDate();
     i++;
   }
+}
+
+bool LibraryManager::BookOrder(const Book& book1,
+                               const Book& book2) {
+  if(book1.GetTitle() <= book2.GetTitle()) return true;
+  return false;
 }

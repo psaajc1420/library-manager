@@ -23,6 +23,8 @@ class LibraryManager {
   void ReturnRecord(std::string); // return book to the bookshelf
   void WriteFile();               // print the books on the bookshelf and 
                                   // loaned out in two seperate files
+  static bool BookOrder(const Book&, 
+                        const Book&);
  private:
   int records_;                    // number of records given
   std::ifstream infile_;           // file object for reading files

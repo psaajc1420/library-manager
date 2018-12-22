@@ -1,11 +1,13 @@
 #include "book.h"
 
-Book::Book(int pages, int height, int width, 
-           std::string title, std::string author_name, 
-           std::string borrower_name, bool is_loaned) {
+Book::Book(int pages, float length, float width, 
+           float height, std::string title, 
+           std::string author_name, std::string borrower_name, 
+           bool is_loaned) {
   SetPages(pages);
-  SetHeight(height);
+  SetLength(length);
   SetWidth(width);
+  SetHeight(height);
   SetTitle(title);
   SetAuthorName(author_name);
   SetBorrowerName(borrower_name);
@@ -48,8 +50,9 @@ std::ostream& operator<< (std::ostream& output, const Book& book) {
   output << "Author Name: " << book.author_name_ << std::endl;
   output << "Borrower Name: " << book.borrower_name_ << std::endl;
   output << "Number of pages: " << book.pages_ << std::endl;
-  output << "Height: " << book.height_ << std::endl;
+  output << "Length: " << book.length_ << std::endl;
   output << "Width: " << book.width_ << std::endl;
+  output << "Height: " << book.height_ << std::endl;
   output << "Area: " << book.GetArea() << std::endl;
   output << "Date: " << book.GetDate().GetDate() << std::endl;
   output << std::endl;

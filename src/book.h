@@ -9,17 +9,19 @@
 class Book {
 
  public:
-  Book(int pages=0, int height=0, int width=0,
+  Book(int pages=0, float length=0, float width=0, float height=0,
        std::string title="", std::string author_name="", 
        std::string borrower_name="", bool is_loaned=false);
 
   // Setters and getters for each instance variable
   int GetPages() const ;
   void SetPages(int);
-  int GetHeight() const;
-  void SetHeight(int);
-  int GetWidth() const;
-  void SetWidth(int);
+  float GetLength() const;
+  void SetLength(float);
+  float GetWidth() const;
+  void SetWidth(float);
+  float GetHeight() const;
+  void SetHeight(float);
   std::string GetTitle() const;
   void SetTitle(const std::string);
   std::string GetAuthorName() const;
@@ -40,8 +42,9 @@ class Book {
 
  private:
   int pages_;                  // number of pages in a book
-  int height_;                 // height of a book
-  int width_;                  // width of a book
+  float height_;               // height of a book
+  float length_;               // length of a book
+  float width_;                // width of a book
   Date date_;                  // date object that stores day, month and year
                                // of return
   std::string title_;          // title of a book
@@ -54,10 +57,12 @@ class Book {
 // Standard getters and setters
 inline int Book::GetPages() const { return pages_; }
 inline void Book::SetPages(int pages) { pages_ = pages; } 
-inline int Book::GetWidth() const { return width_; }
-inline void Book::SetWidth(int width) { width_ = width; }
-inline int Book::GetHeight() const { return height_; }
-inline void Book::SetHeight(int height) { height_ = height; }
+inline float Book::GetLength() const { return length_; }
+inline void Book::SetLength(float length) { length_ = length; }
+inline float Book::GetWidth() const { return width_; }
+inline void Book::SetWidth(float width) { width_ = width; }
+inline float Book::GetHeight() const { return height_; }
+inline void Book::SetHeight(float height) { height_ = height; }
 inline std::string Book::GetTitle() const { return title_; }
 inline void Book::SetTitle(std::string title) { title_ = title; }
 inline std::string Book::GetAuthorName() const { return author_name_; }
