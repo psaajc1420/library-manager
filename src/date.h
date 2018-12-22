@@ -1,5 +1,5 @@
-#ifndef _DATE__
-#define _DATE__
+#ifndef LIBRARY_MANAGER_DATE_H_
+#define LIBRARY_MANAGER_DATE_H_
 
 #include <string>
 #include <sstream>
@@ -30,4 +30,4 @@ inline int Date::GetMonth() { return month_; }
 inline void Date::SetYear(int year) { year_ = year; }
 inline int Date::GetYear() { return year_; }
 
-#endif
+#endif // LIBRARY_MANAGER_DATE_H_

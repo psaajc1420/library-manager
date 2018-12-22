@@ -1,5 +1,5 @@
-#ifndef _BOOK__
-#define _BOOK__
+#ifndef LIBRARY_MANAGER_BOOK_H_
+#define LIBRARY_MANAGER_BOOK_H_
 
 #include <iostream>
 #include <string>
@@ -79,4 +79,4 @@ inline bool Book::GetIsLoaned() const { return is_loaned_; }
 inline void Book::SetIsLoaned(bool is_loaned) { is_loaned_ = is_loaned; }
 inline int Book::GetArea() const { return height_*width_; }
 
-#endif
+#endif // LIBRARY_MANAGER_BOOK_H_
