@@ -7,7 +7,8 @@
 class Date {
 
  public:
-  Date(int day=0, int month=0, int year=0);
+  explicit Date(int day=0, int month=0,
+                int year=0);
   void SetDay(int);
   int GetDay();
   void SetMonth(int);

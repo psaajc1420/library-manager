@@ -9,11 +9,11 @@
 class Book {
 
  public:
-  Book(int pages=0, float length=0, float width=0, float height=0,
-       std::string title="", std::string author_name="", 
-       std::string borrower_name="", bool is_loaned=false);
-
-  // Setters and getters for each instance variable
+  explicit Book(int pages=0, float length=0, float width=0, 
+                float height=0, std::string title="", 
+                std::string author_name="", std::string borrower_name="", 
+                bool is_loaned=false);
+                
   int GetPages() const ;
   void SetPages(int);
   float GetLength() const;

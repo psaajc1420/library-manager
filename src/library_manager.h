@@ -13,7 +13,7 @@ class LibraryManager {
           
  public:
   LibraryManager();   
-  LibraryManager(std::string);    
+  explicit LibraryManager(std::string);    
   void ReadFile();                // read contents of the file to call the 
                                   // apppropiate methods
   void AddRecord(Book&);          // add book to the bookshelf
