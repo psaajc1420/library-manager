@@ -1,13 +1,11 @@
-#ifndef LIBRARY_MANAGER_AUTHOR_H
-#define LIBRARY_MANAGER_AUTHOR_H
+#ifndef LIBRARY_MANAGER_PERSON_H
+#define LIBRARY_MANAGER_PERSON_H
 
 #include <string>
-#include <vector>
 
-class Author {
-
+class Person {
  public:
-  explicit Author(std::string name="");
+  explicit Person(std::string name="");
   std::string GetName() const;
   void SetName(std::string);
   std::string GetFirstName() const;
@@ -24,6 +22,5 @@ class Author {
   std::string first_name_;
   std::string middle_name;
   std::string last_name_;
-
 };
-#endif // LIBRARY_MANAGER_AUTHOR_H
+#endif // LIBRARY_MANAGER_PERSON_H 

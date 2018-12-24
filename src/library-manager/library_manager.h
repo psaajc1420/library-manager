@@ -6,11 +6,10 @@
 #include <sstream>
 
 #include "linked-lists/linked_list.h"
-#include "book.h"
-#include "date.h"
+#include "library-manager/book.h"
+#include "library-manager/date.h"
 
 class LibraryManager {
-          
  public:
   LibraryManager();   
   explicit LibraryManager(std::string);    

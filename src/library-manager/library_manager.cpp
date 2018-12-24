@@ -1,15 +1,14 @@
-#include "library_manager.h"
+#include "library-manager/library_manager.h"
 
 LibraryManager::LibraryManager() {
-  
   std::string file_name;
-  while(true) {
+  while (true) {
     std::cout << "Enter file name: ";
     std::cin >> file_name;
 
     infile_.open(file_name);    
 
-    if(!infile_) {
+    if (!infile_) {
       std::cerr << "Error: file can't be opened as it was not found." << std::endl;
     } else {
       break;
@@ -22,10 +21,9 @@ LibraryManager::LibraryManager() {
 }
 
 LibraryManager::LibraryManager(std::string file_name) {
-
   infile_.open(file_name);    
 
-  if(!infile_) {
+  if (!infile_) {
     std::cerr << "Error: file can't be opened as it was not found." << std::endl;
   } else {
     std::string record_string;
@@ -35,7 +33,6 @@ LibraryManager::LibraryManager(std::string file_name) {
 }
 
 void LibraryManager::ReadFile() {
-
   int pages, edition;
   float length, width, height;
   int month, day, year;
@@ -44,10 +41,10 @@ void LibraryManager::ReadFile() {
   std::string borrower_last_name, borrower_first_name;
   std::string author_name, borrower_name;
   std::string line;
-  while(std::getline(infile_, line)) {
+  while (std::getline(infile_, line)) {
     std::istringstream iss(line);
     iss >> type;
-    if(type == "A"){
+    if (type == "A"){
       iss >> length >> width >> height >> pages >> edition;
       iss >> author_last_name >> author_first_name;
       std::getline(iss, title);
@@ -55,7 +52,7 @@ void LibraryManager::ReadFile() {
       author_name = author_first_name + " " + author_last_name; 
       Book book(pages, length, width, height, title, author_name);
       AddRecord(book);
-    } else if(type == "L") {
+    } else if (type == "L") {
       iss >> borrower_last_name >> borrower_first_name;
       iss >> month >> day >> year;
       std::getline(iss, title);
@@ -63,7 +60,7 @@ void LibraryManager::ReadFile() {
       borrower_name = borrower_first_name + " " + borrower_last_name;
       Date date(day, month, year);
       LoanRecord(borrower_name, title, date);
-    } else if(type == "R") {
+    } else if (type == "R") {
       std::getline(iss, title);
       title = title.substr(1);
       ReturnRecord(title);
@@ -83,10 +80,9 @@ void LibraryManager::AddRecord(Book& book) {
 
 void LibraryManager::LoanRecord(std::string borrower_name,
                                 std::string title, Date& date) {
-
   Book current_book;
   LinkedList<Book>::iterator it;
-  for(it = book_shelf_.Begin(); it != book_shelf_.End(); ++it) {
+  for (it = book_shelf_.Begin(); it != book_shelf_.End(); ++it) {
     current_book = *it;
     if (current_book.GetTitle() == title) {
       break;
@@ -100,11 +96,10 @@ void LibraryManager::LoanRecord(std::string borrower_name,
 }
 
 void LibraryManager::ReturnRecord(std::string title) {
-
   Date date;
   Book current_book;
   LinkedList<Book>::iterator it;
-  for(it = loaned_books_.Begin(); it != loaned_books_.End(); ++it) {
+  for (it = loaned_books_.Begin(); it != loaned_books_.End(); ++it) {
     current_book = *it;
     if (current_book.GetTitle() == title) {
       break;
@@ -118,7 +113,6 @@ void LibraryManager::ReturnRecord(std::string title) {
 
 
 void LibraryManager::WriteFile() {
-
   int i = 1;
   int month, day, year;
   std::string previous_date;
@@ -128,7 +122,7 @@ void LibraryManager::WriteFile() {
   outfile_.open("book_shelf.txt");
   outfile_ << book_shelf_.Size() << std::endl;
 
-  for(it = book_shelf_.Begin(); it != book_shelf_.End(); ++it) {
+  for (it = book_shelf_.Begin(); it != book_shelf_.End(); ++it) {
     book = *it;
     outfile_ << i << ". ";
     outfile_ << book.GetTitle() << " by " << book.GetAuthorName();
@@ -143,13 +137,13 @@ void LibraryManager::WriteFile() {
   i = 1;
   outfile_.open("books_on_loan.txt");
   outfile_ << loaned_books_.Size() << std::endl;
-  for(it = loaned_books_.Begin(); it != loaned_books_.End(); ++it) {
+  for (it = loaned_books_.Begin(); it != loaned_books_.End(); ++it) {
     book = *it;
     month = book.GetDate().GetMonth();
     day = book.GetDate().GetDay();
     year = book.GetDate().GetYear();
-    if(previous_date != book.GetDate().GetDate()) {
-      if(day < 10) {
+    if (previous_date != book.GetDate().GetDate()) {
+      if (day < 10) {
         outfile_ << month << "/" << 0 << day << "/" << year << std::endl;
       } else {
         outfile_ << month << "/" << day << "/" << year << std::endl;
@@ -167,6 +161,6 @@ void LibraryManager::WriteFile() {
 
 bool LibraryManager::BookOrder(const Book& book1,
                                const Book& book2) {
-  if(book1.GetTitle() <= book2.GetTitle()) return true;
+  if (book1.GetTitle() <= book2.GetTitle()) return true;
   return false;
 }

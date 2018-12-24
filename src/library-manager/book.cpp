@@ -1,4 +1,4 @@
-#include "book.h"
+#include "library-manager/book.h"
 
 Book::Book(int pages, float length, float width, 
            float height, std::string title, 
@@ -19,7 +19,6 @@ void Book::Print() {
 }
 
 bool Book::operator<= (const Book& book) const {
-
   if(is_loaned_) {
     std::string curr_date = book.GetDate().GetDate();
     std::string this_date = this->GetDate().GetDate();

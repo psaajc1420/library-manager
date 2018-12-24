@@ -4,10 +4,10 @@
 #include <iostream>
 #include <string>
 
-#include "date.h"
+#include "library-manager/author.h"
+#include "library-manager/date.h"
 
 class Book {
-
  public:
   explicit Book(int pages=0, float length=0, float width=0, 
                 float height=0, std::string title="", 
@@ -41,18 +41,18 @@ class Book {
   friend std::ostream& operator<< (std::ostream&, const Book&);
 
  private:
-  int pages_;                  // number of pages in a book
-  float height_;               // height of a book
-  float length_;               // length of a book
-  float width_;                // width of a book
-  Date date_;                  // date object that stores day, month and year
-                               // of return
-  std::string title_;          // title of a book
-  std::string author_name_;    // name of the books author
-  std::string borrower_name_;  // name of the borrower 
-  bool is_loaned_;             // true if book is loaned out false otherwise
+  int pages_;                    // number of pages in a book
+  float height_;                 // height of a book
+  float length_;                 // length of a book
+  float width_;                  // width of a book
+  Date date_;                    // date object that stores day, month and year
+                                 // of return
+  std::vector<Author> authors_;  // list of authors
+  std::string title_;            // title of a book
+  std::string author_name_;      // name of the books author
+  std::string borrower_name_;    // name of the borrower 
+  bool is_loaned_;               // true if book is loaned out false otherwise
 };
-
 
 // Standard getters and setters
 inline int Book::GetPages() const { return pages_; }

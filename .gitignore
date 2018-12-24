@@ -1,6 +1,8 @@
 # do not include these directories
 /bin
 /build
+# vscode settings dir
+.vscode 
 
 # do not include doc files 
 *.doc
