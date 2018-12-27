@@ -43,8 +43,8 @@ class Book {
   bool operator<= (const Book&) const;
   bool operator== (const Book&) const;
   friend std::ostream& operator<< (std::ostream&, const Book&);
-
- private:
+  
+ private: 
   int pages_;                    // number of pages in a book
   float height_;                 // height of a book
   float length_;                 // length of a book

@@ -5,16 +5,13 @@ LibraryManager::LibraryManager() {
   while (true) {
     std::cout << "Enter file name: ";
     std::cin >> file_name;
-
     infile_.open(file_name);    
-
     if (!infile_) {
       std::cerr << "Error: file can't be opened as it was not found." << std::endl;
     } else {
       break;
     }
   }
-
   std::string record_string;
   std::getline(infile_, record_string);
   records_ = stoi(record_string);
@@ -22,7 +19,16 @@ LibraryManager::LibraryManager() {
 
 LibraryManager::LibraryManager(std::string file_name) {
   infile_.open(file_name);    
+  if (infile_) {
+    std::string record_string;
+    std::getline(infile_, record_string);
+    records_ = stoi(record_string);
+  }
+  std::cerr << "Error: file can't be opened as it was not found." << std::endl;
+}
 
+LibraryManager::LibraryManager(std::string file_name) {
+  infile_.open(file_name);    
   if (!infile_) {
     std::cerr << "Error: file can't be opened as it was not found." << std::endl;
   } else {
@@ -42,28 +48,14 @@ void LibraryManager::ReadFile() {
   std::string author_name, borrower_name;
   std::string line;
   while (std::getline(infile_, line)) {
-    std::istringstream iss(line);
-    iss >> type;
+    line_.str(line);
+    line_ >> type;
     if (type == "A") {
-      iss >> length >> width >> height >> pages >> edition;
-      iss >> author_last_name >> author_first_name;
-      std::getline(iss, title);
-      title = title.substr(1);
-      author_name = author_first_name + " " + author_last_name; 
-      Book book(pages, length, width, height, title, author_name);
-      AddRecord(book);
+      AddRecord();
     } else if (type == "L") {
-      iss >> borrower_last_name >> borrower_first_name;
-      iss >> month >> day >> year;
-      std::getline(iss, title);
-      title = title.substr(1);
-      borrower_name = borrower_first_name + " " + borrower_last_name;
-      Date date(day, month, year);
-      LoanRecord(borrower_name, title, date);
+      LoanRecord();
     } else if (type == "R") {
-      std::getline(iss, title);
-      title = title.substr(1);
-      ReturnRecord(title);
+      ReturnRecord();
     } else {
       std::cout << "Something is wrong" << std::endl;
       std::cout << line << std::endl;
@@ -74,41 +66,59 @@ void LibraryManager::ReadFile() {
   loaned_books_.Sort();
 }
 
-void LibraryManager::AddRecord(Book& book) {
-  book_shelf_.PushBack(book);
-}
-
-void LibraryManager::LoanRecord(std::string borrower_name,
-                                std::string title, Date& date) {
+Book* LibraryManager::FindBook(std::string title) {
   Book current_book;
   LinkedList<Book>::iterator it;
   for (it = book_shelf_.Begin(); it != book_shelf_.End(); ++it) {
     current_book = *it;
     if (current_book.GetTitle() == title) {
-      break;
+      return &current_book;
     }
   }
-  current_book.SetBorrowerName(borrower_name);
-  current_book.SetDate(date);
-  current_book.SetIsLoaned(true);
-  loaned_books_.PushBack(current_book);
-  book_shelf_.Remove(current_book);
+  return nullptr;
 }
 
-void LibraryManager::ReturnRecord(std::string title) {
-  Date date;
-  Book current_book;
-  LinkedList<Book>::iterator it;
-  for (it = loaned_books_.Begin(); it != loaned_books_.End(); ++it) {
-    current_book = *it;
-    if (current_book.GetTitle() == title) {
-      break;
-    }
-  }
-  current_book.SetIsLoaned(false);
-  current_book.SetDate(date);
-  book_shelf_.PushBack(current_book);
-  loaned_books_.Remove(current_book);
+void LibraryManager::AddRecord() {
+  int pages, edition;
+  float length, width, height;
+  std::string title, type;
+  std::string author_last_name, author_first_name;
+  std::string author_name;
+  line_ >> length >> width >> height >> pages >> edition;
+  line_ >> author_last_name >> author_first_name;
+  std::getline(line_, title);
+  title = title.substr(1);
+  author_name = author_first_name + " " + author_last_name; 
+  Book book(pages, length, width, height, title, author_name);
+  book_shelf_.PushBack(book);
+}
+
+void LibraryManager::LoanRecord() {
+  int month, day, year;
+  std::string title, borrower_name;
+  std::string borrower_last_name, borrower_first_name;            
+  line_ >> borrower_last_name >> borrower_first_name;
+  line_ >> month >> day >> year;
+  std::getline(line_, title);
+  title = title.substr(1);
+  borrower_name = borrower_first_name + " " + borrower_last_name;
+  Date date(day, month, year);
+  Book* current_book = FindBook(title);
+  current_book->SetBorrowerName(borrower_name);
+  current_book->SetDate(date);
+  current_book->SetIsLoaned(true);
+  loaned_books_.PushBack(*current_book);
+  book_shelf_.Remove(*current_book);
+}
+
+void LibraryManager::ReturnRecord() {
+  std::string title;
+  std::getline(line_, title);
+  title = title.substr(1);
+  Book* current_book = FindBook(title);
+  current_book->SetIsLoaned(false);
+  book_shelf_.PushBack(*current_book);
+  loaned_books_.Remove(*current_book);
 }
 
 
