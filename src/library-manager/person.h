@@ -6,6 +6,8 @@
 class Person {
  public:
   explicit Person(std::string name="");
+  explicit Person(std::string, std::string,
+                  std::string);
   std::string GetName() const;
   void SetName(std::string);
   std::string GetFirstName() const;

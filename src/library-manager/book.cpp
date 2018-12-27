@@ -18,8 +18,18 @@ void Book::Print() {
   std::cout << *this;
 }
 
+void Book::AddAuthor(const std::vector<Author>& authors) {
+  for (int i = 0; i < authors.size(); i++) {
+    authors_.push_back(authors[i]);
+  }
+}
+
+void Book::AddAuthor(const Author& author) {
+  authors_.push_back(author);
+}
+
 bool Book::operator<= (const Book& book) const {
-  if(is_loaned_) {
+  if (is_loaned_) {
     std::string curr_date = book.GetDate().GetDate();
     std::string this_date = this->GetDate().GetDate();
     if(this_date.compare(curr_date) < 0) {
@@ -39,7 +49,7 @@ bool Book::operator<= (const Book& book) const {
 }
 
 bool Book::operator== (const Book& book) const {
-  if(this->GetTitle() == book.GetTitle()) return true;
+  if (this->GetTitle() == book.GetTitle()) return true;
   return false;
 }
 

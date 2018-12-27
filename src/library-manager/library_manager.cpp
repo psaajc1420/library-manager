@@ -44,7 +44,7 @@ void LibraryManager::ReadFile() {
   while (std::getline(infile_, line)) {
     std::istringstream iss(line);
     iss >> type;
-    if (type == "A"){
+    if (type == "A") {
       iss >> length >> width >> height >> pages >> edition;
       iss >> author_last_name >> author_first_name;
       std::getline(iss, title);

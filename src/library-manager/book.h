@@ -5,6 +5,7 @@
 #include <string>
 
 #include "library-manager/author.h"
+#include "library-manager/borrower.h"
 #include "library-manager/date.h"
 
 class Book {
@@ -12,8 +13,7 @@ class Book {
   explicit Book(int pages=0, float length=0, float width=0, 
                 float height=0, std::string title="", 
                 std::string author_name="", std::string borrower_name="", 
-                bool is_loaned=false);
-                
+                bool is_loaned=false);                
   int GetPages() const ;
   void SetPages(int);
   float GetLength() const;
@@ -24,6 +24,10 @@ class Book {
   void SetHeight(float);
   std::string GetTitle() const;
   void SetTitle(const std::string);
+  const std::vector<Author>& GetAuthors() const;
+  const Borrower& GetBorrower() const;
+  void AddAuthor(const Author&);
+  void AddAuthor(const std::vector<Author>&);
   std::string GetAuthorName() const;
   void SetAuthorName(const std::string);
   std::string GetBorrowerName() const;
@@ -48,6 +52,7 @@ class Book {
   Date date_;                    // date object that stores day, month and year
                                  // of return
   std::vector<Author> authors_;  // list of authors
+  Borrower borrower_;            // borrower
   std::string title_;            // title of a book
   std::string author_name_;      // name of the books author
   std::string borrower_name_;    // name of the borrower 
@@ -73,6 +78,8 @@ inline std::string Book::GetBorrowerName() const { return borrower_name_; }
 inline void Book::SetBorrowerName(std::string borrower_name) { 
   borrower_name_ = borrower_name; 
 }
+inline const std::vector<Author>& GetAuthors() const { return authors_; }
+inline const Borrower& GetBorrower() const { return borrower_; }
 inline void Book::SetDate(const Date& date) { date_ = date; }
 inline Date Book::GetDate() const { return date_; }
 inline bool Book::GetIsLoaned() const { return is_loaned_; }
