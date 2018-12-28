@@ -78,8 +78,8 @@ inline std::string Book::GetBorrowerName() const { return borrower_name_; }
 inline void Book::SetBorrowerName(std::string borrower_name) { 
   borrower_name_ = borrower_name; 
 }
-inline const std::vector<Author>& GetAuthors() const { return authors_; }
-inline const Borrower& GetBorrower() const { return borrower_; }
+inline const std::vector<Author>& Book::GetAuthors() const { return authors_; }
+inline const Borrower& Book::GetBorrower() const { return borrower_; }
 inline void Book::SetDate(const Date& date) { date_ = date; }
 inline Date Book::GetDate() const { return date_; }
 inline bool Book::GetIsLoaned() const { return is_loaned_; }

@@ -22,7 +22,23 @@ class Person {
  private:
   std::string name_;
   std::string first_name_;
-  std::string middle_name;
+  std::string middle_name_;
   std::string last_name_;
 };
+
+inline std::string Person::GetName() const { return name_; }
+inline void Person::SetName(std::string name) { name_ = name; }
+inline std::string Person::GetFirstName() const { return first_name_; }
+inline void Person::SetFirstName(std::string first_name) { 
+  first_name_ = first_name; 
+}
+inline std::string Person::GetMiddleName() const { return middle_name_; }
+inline void Person::SetMiddleName(std::string middle_name) { 
+  middle_name_ = middle_name; 
+}
+inline std::string Person::GetLastName() const { return last_name_; }
+inline void Person::SetLastName(std::string last_name) { 
+  last_name_ = last_name; 
+}
+
 #endif // LIBRARY_MANAGER_PERSON_H 

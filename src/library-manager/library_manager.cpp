@@ -23,30 +23,13 @@ LibraryManager::LibraryManager(std::string file_name) {
     std::string record_string;
     std::getline(infile_, record_string);
     records_ = stoi(record_string);
-  }
-  std::cerr << "Error: file can't be opened as it was not found." << std::endl;
-}
-
-LibraryManager::LibraryManager(std::string file_name) {
-  infile_.open(file_name);    
-  if (!infile_) {
-    std::cerr << "Error: file can't be opened as it was not found." << std::endl;
   } else {
-    std::string record_string;
-    std::getline(infile_, record_string);
-    records_ = stoi(record_string);
+    std::cerr << "Error: file can't be opened as it was not found." << std::endl;
   }
 }
 
 void LibraryManager::ReadFile() {
-  int pages, edition;
-  float length, width, height;
-  int month, day, year;
-  std::string title, type;
-  std::string author_last_name, author_first_name;
-  std::string borrower_last_name, borrower_first_name;
-  std::string author_name, borrower_name;
-  std::string line;
+  std::string line, type;
   while (std::getline(infile_, line)) {
     line_.str(line);
     line_ >> type;
@@ -60,22 +43,24 @@ void LibraryManager::ReadFile() {
       std::cout << "Something is wrong" << std::endl;
       std::cout << line << std::endl;
     }
+    // Clear global string stream object for reuse
+    line_.clear();
   }
 
   book_shelf_.Sort(BookOrder);
   loaned_books_.Sort();
 }
 
-Book* LibraryManager::FindBook(std::string title) {
+const Book LibraryManager::FindBook(std::string title) {
   Book current_book;
   LinkedList<Book>::iterator it;
   for (it = book_shelf_.Begin(); it != book_shelf_.End(); ++it) {
     current_book = *it;
     if (current_book.GetTitle() == title) {
-      return &current_book;
+      break;
     }
   }
-  return nullptr;
+  return current_book;
 }
 
 void LibraryManager::AddRecord() {
@@ -103,22 +88,22 @@ void LibraryManager::LoanRecord() {
   title = title.substr(1);
   borrower_name = borrower_first_name + " " + borrower_last_name;
   Date date(day, month, year);
-  Book* current_book = FindBook(title);
-  current_book->SetBorrowerName(borrower_name);
-  current_book->SetDate(date);
-  current_book->SetIsLoaned(true);
-  loaned_books_.PushBack(*current_book);
-  book_shelf_.Remove(*current_book);
+  Book current_book = FindBook(title);
+  current_book.SetBorrowerName(borrower_name);
+  current_book.SetDate(date);
+  current_book.SetIsLoaned(true);
+  loaned_books_.PushBack(current_book);
+  book_shelf_.Remove(current_book);
 }
 
 void LibraryManager::ReturnRecord() {
   std::string title;
   std::getline(line_, title);
   title = title.substr(1);
-  Book* current_book = FindBook(title);
-  current_book->SetIsLoaned(false);
-  book_shelf_.PushBack(*current_book);
-  loaned_books_.Remove(*current_book);
+  Book current_book = FindBook(title);
+  current_book.SetIsLoaned(false);
+  book_shelf_.PushBack(current_book);
+  loaned_books_.Remove(current_book);
 }
 
 

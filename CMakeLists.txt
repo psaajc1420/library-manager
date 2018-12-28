@@ -16,9 +16,13 @@ set(bookloans_build_include_dirs
 include_directories(${bookloans_build_include_dirs})
 
 file(GLOB SOURCES
-    "src/book.cpp"
-    "src/date.cpp"
-    "src/library_manager.cpp"
+    "src/library-manager/person.cpp"
+    "src/library-manager/borrower.cpp"
+    "src/library-manager/author.cpp"
+    "src/library-manager/date.cpp"
+    "src/library-manager/uid.cpp"
+    "src/library-manager/book.cpp"
+    "src/library-manager/library_manager.cpp"
 )
 
 # Add all files in src directory

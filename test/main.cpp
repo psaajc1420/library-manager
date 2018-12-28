@@ -1,11 +1,11 @@
-#include "library_manager.h"
+#include "library-manager/library_manager.h"
 
 int main(int argc, char** argv) {
 
     LibraryManager* manager;
 
-    // Check for command line arguments if
-    // there are more than call overloaded
+    // Check for command line argument. If
+    // there are more than one call overloaded
     // LibraryManager constructor otherwise
     // call the default constructor
     if(argc > 1) {

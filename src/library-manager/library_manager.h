@@ -27,10 +27,10 @@ class LibraryManager {
   int records_;                           // number of records given
   std::ifstream infile_;                  // file object for reading files
   std::ofstream outfile_;                 // file object for writing files
-  std::istringstream line_;               // string stream object to parse a line
+  std::istringstream line_;               // string stream object to parse lines
   LinkedList<Book> book_shelf_;           // list that contains the books on the shelf
   LinkedList<Book> loaned_books_;         // list that contains the loaned books
 
-  Book* FindBook(std::string);
+  const Book FindBook(std::string);
 };
 #endif // LIBRARY_MANAGER_LIBRARY_MANAGER_H_
