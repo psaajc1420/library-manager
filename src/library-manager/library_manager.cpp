@@ -1,6 +1,6 @@
 #include "library-manager/library_manager.h"
 
-LibraryManager::LibraryManager() {
+void LibraryManager::Open() {
   std::string file_name;
   while (true) {
     std::cout << "Enter file name: ";
@@ -12,23 +12,42 @@ LibraryManager::LibraryManager() {
       break;
     }
   }
-  std::string record_string;
-  std::getline(infile_, record_string);
-  records_ = stoi(record_string);
+  std::string records;
+  std::getline(infile_, records);
+  records_ = stoi(records);
 }
 
-LibraryManager::LibraryManager(std::string file_name) {
+void LibraryManager::Open(std::string file_name) {
   infile_.open(file_name);    
   if (infile_) {
-    std::string record_string;
-    std::getline(infile_, record_string);
-    records_ = stoi(record_string);
+    std::string records;
+    std::getline(infile_, records);
+    records_ = stoi(records);
   } else {
     std::cerr << "Error: file can't be opened as it was not found." << std::endl;
   }
 }
 
-void LibraryManager::ReadFile() {
+void LibraryManager::Read(int num_files, char** files) {
+  // Reduce by 1 to not include the executable
+  num_files -= 1;
+  if(num_files == 0) {
+    Open();
+  } else if (num_files == 1) {
+    Open(files[0]);
+    ReadBooks();
+  } else if (num_files == 2) {
+    Open(files[1]);
+    ReadBooks();
+    Open(files[2]);
+    ReadAuthors();
+  } else {
+    std::cerr << "Shouldn't be more than 2 files given as command line arguments";
+    std::cout << std::endl;
+  }
+}
+
+void LibraryManager::ReadBooks() {
   std::string line, type;
   while (std::getline(infile_, line)) {
     line_.str(line);
@@ -46,9 +65,26 @@ void LibraryManager::ReadFile() {
     // Clear global string stream object for reuse
     line_.clear();
   }
+  infile_.close();
 
   book_shelf_.Sort(BookOrder);
   loaned_books_.Sort();
+}
+
+void LibraryManager::ReadAuthors() {
+  std::string author_names, title;
+  std::string first_name;
+  std::string middle_name;
+  std::string last_name;
+  for (int i = 0; i < records_; i++) {
+    std::getline(infile_, title);
+    while (std::getline(infile_, author_names, ',')) {
+      std::cout << author_names << std::endl;
+    }
+  }
+  // Clear global string stream object for reuse
+  line_.clear();
+  infile_.close();
 }
 
 const Book LibraryManager::FindBook(std::string title) {
@@ -107,7 +143,7 @@ void LibraryManager::ReturnRecord() {
 }
 
 
-void LibraryManager::WriteFile() {
+void LibraryManager::Write() {
   int i = 1;
   int month, day, year;
   std::string previous_date;
@@ -152,6 +188,7 @@ void LibraryManager::WriteFile() {
     previous_date = book.GetDate().GetDate();
     i++;
   }
+  outfile_.close();
 }
 
 bool LibraryManager::BookOrder(const Book& book1,

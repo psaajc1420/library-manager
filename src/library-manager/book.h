@@ -36,9 +36,9 @@ class Book {
   Date GetDate() const;
   bool GetIsLoaned() const;
   void SetIsLoaned(bool);
-
-  int GetArea() const;  // get surface area of the book
-  void Print();         // print out a book
+  
+  int GetArea() const;          // get surface area of the book
+  void Print();                 // print out a book
 
   bool operator<= (const Book&) const;
   bool operator== (const Book&) const;

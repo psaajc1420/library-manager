@@ -11,15 +11,17 @@
 #include "library-manager/uid.h"
 
 class LibraryManager {
- public:
-  LibraryManager();                       
-  explicit LibraryManager(std::string);    
-  void ReadFile();                        // read contents of the file to call the 
-                                          // apppropiate methods
+ public: 
+  void Open();                            // Open file by user input
+  void Open(std::string);                 // Open file by file name
+  void Read(int, char**);                 // read contents of the file to call the 
+                                          // apppropiate methods  
+  void ReadBooks();
+  void ReadAuthors();
   void AddRecord();                       // add book to the bookshelf
   void LoanRecord();                      // loan book from the bookshelf
   void ReturnRecord();                    // return book to the bookshelf
-  void WriteFile();                       // print the books on the bookshelf and 
+  void Write();                           // print the books on the bookshelf and 
                                           // loaned out in two seperate files
   static bool BookOrder(const Book&,      // boolean predicate for the book order
                         const Book&);     // on the bookshelf
