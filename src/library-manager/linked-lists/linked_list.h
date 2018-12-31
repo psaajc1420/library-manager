@@ -40,17 +40,21 @@ class LinkedList {
  public:
   LinkedList();
   LinkedList(const LinkedList<T> &);
-  const LinkedList<T>& operator= (const LinkedList<T>&);
+  LinkedList(LinkedList<T> &&);
+  const LinkedList<T>& operator=(const LinkedList<T>&);
+  const LinkedList<T>& operator=(LinkedList<T>&&);
   ~LinkedList();
 
   typedef LinkedListIterator<T> iterator;
 
-  void PushBack(T);
-  void PushFront(T);
-  void Insert(T);
+  void PushBack(const T&);
+  void PushBack(T&&);
+  void PushFront(const T&);
+  void Insert(const T&);
   // void popFront();
   // void popBack();
-  void Remove(T);
+  void Remove(const T&);
+  void Erase(iterator);
 
   void Sort();
 
@@ -181,6 +185,13 @@ LinkedList<T>::LinkedList(const LinkedList<T>& list) {
   Copy(list);
 }
 
+
+template <typename T>
+LinkedList<T>::LinkedList(LinkedList<T>&& list) {
+  Copy(list);
+  list.Initialize();
+}
+
 /*
     Implementation of the assignment operator
 */
@@ -192,6 +203,20 @@ const LinkedList<T>& LinkedList<T>::operator= (const LinkedList<T>& list) {
 
   return *this;
 }
+
+template <typename T>
+const LinkedList<T>& LinkedList<T>::operator=(LinkedList<T>&& list) {
+    
+  if(this != &list) {
+    Clear();
+    Copy(list);
+    list.Initialize();
+  }
+
+  return *this;
+}
+
+
 
 /*
     Implementation of the Destructor
@@ -346,7 +371,7 @@ Node<T>* LinkedList<T>::Merge(Node<T>* left, Node<T>* right,
 }
 
 template <typename T>
-void LinkedList<T>::Insert(T data) {
+void LinkedList<T>::Insert(const T& data) {
 
   Node<T>* newNode = new Node<T>();
   newNode->data = data;
@@ -369,7 +394,7 @@ void LinkedList<T>::Insert(T data) {
 }
 
 template <typename T>
-void LinkedList<T>::Remove(T data) {
+void LinkedList<T>::Remove(const T& data) {
   assert(head_ != nullptr);
   // Check if list only contains one element.
   if(head_->next == nullptr) {
@@ -412,20 +437,30 @@ void LinkedList<T>::Remove(T data) {
       delete temp;
       length_--;
     } else {
-      std::cerr << "Something is very wrong" << std::endl;
+      std::cerr << "Can't remove from an empty list" << std::endl;
       exit(EXIT_FAILURE);
     }
   }
 }
 
 template <typename T>
-void LinkedList<T>::PushBack(T data) {
+void LinkedList<T>::Erase(iterator it) {
+  if (!IsEmpty()) {
+    Remove(*it);
+  } else {
+    std::cerr << "Can't remove from an empty list" << std::endl;
+    exit(EXIT_FAILURE);
+  }
+}
+
+template <typename T>
+void LinkedList<T>::PushBack(const T& data) {
 
   Node<T>* newNode = new Node<T>();
   newNode->data = data;
   newNode->next = nullptr;
 
-  if(head_ != nullptr) {
+  if (head_ != nullptr) {
     tail_->next = newNode;
     tail_ = newNode;
   } else {
@@ -437,7 +472,24 @@ void LinkedList<T>::PushBack(T data) {
 }
 
 template <typename T>
-void LinkedList<T>::PushFront(T data) {
+void LinkedList<T>::PushBack(T&& data) {
+  Node<T>* newNode = new Node<T>();
+  newNode->data = std::move(data);
+  newNode->next = nullptr;
+
+  if (head_ != nullptr) {
+    tail_->next = newNode;
+    tail_ = newNode;
+  } else {
+    head_ = newNode;
+    tail_ = head_;
+  }
+
+  length_++;
+}
+
+template <typename T>
+void LinkedList<T>::PushFront(const T& data) {
 
   Node<T>* newNode = new Node<T>();
   newNode->data = data;

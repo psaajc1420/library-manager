@@ -1,6 +1,7 @@
 #ifndef LIBRARY_MANAGER_PERSON_H
 #define LIBRARY_MANAGER_PERSON_H
 
+#include <iostream>
 #include <string>
 
 class Person {
@@ -19,7 +20,10 @@ class Person {
   static std::vector<std::string> ParseName();
   static std::string GetInitial(std::string);
 
- private:
+  bool operator< (const Person&) const;
+  bool operator<= (const Person&) const;
+  friend std::ostream& operator<< (std::ostream&, const Person&);
+ protected:
   std::string name_;
   std::string first_name_;
   std::string middle_name_;

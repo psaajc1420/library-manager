@@ -12,18 +12,11 @@ void LibraryManager::Open() {
       break;
     }
   }
-  std::string records;
-  std::getline(infile_, records);
-  records_ = stoi(records);
 }
 
 void LibraryManager::Open(std::string file_name) {
   infile_.open(file_name);    
-  if (infile_) {
-    std::string records;
-    std::getline(infile_, records);
-    records_ = stoi(records);
-  } else {
+  if (!infile_) {
     std::cerr << "Error: file can't be opened as it was not found." << std::endl;
   }
 }
@@ -34,7 +27,7 @@ void LibraryManager::Read(int num_files, char** files) {
   if(num_files == 0) {
     Open();
   } else if (num_files == 1) {
-    Open(files[0]);
+    Open(files[1]);
     ReadBooks();
   } else if (num_files == 2) {
     Open(files[1]);
@@ -45,10 +38,15 @@ void LibraryManager::Read(int num_files, char** files) {
     std::cerr << "Shouldn't be more than 2 files given as command line arguments";
     std::cout << std::endl;
   }
+  book_shelf_.Sort(BookOrder);
+  loaned_books_.Sort();
 }
 
 void LibraryManager::ReadBooks() {
   std::string line, type;
+  std::string records;
+  std::getline(infile_, records);
+  records_ = stoi(records);
   while (std::getline(infile_, line)) {
     line_.str(line);
     line_ >> type;
@@ -66,52 +64,45 @@ void LibraryManager::ReadBooks() {
     line_.clear();
   }
   infile_.close();
-
-  book_shelf_.Sort(BookOrder);
-  loaned_books_.Sort();
 }
 
-void LibraryManager::ReadAuthors() {
-  std::string author_names, title;
-  std::string first_name;
-  std::string middle_name;
-  std::string last_name;
-  for (int i = 0; i < records_; i++) {
-    std::getline(infile_, title);
-    while (std::getline(infile_, author_names, ',')) {
-      std::cout << author_names << std::endl;
+void LibraryManager::ReadAuthors() {  
+  std::string line;
+  std::string author_info[4];
+  BookPtrIterator it;
+  while (std::getline(infile_, line)) {
+    std::size_t found = 0;
+    for (int i = 0; found != std::string::npos; i++) {
+      found = line.find(',');
+      author_info[i] = line.substr(0,found); 
+      line = line.substr(found+1);
     }
+    it = FindBook(author_info[3]);
+    (*it)->AddAuthor(author_info[2], author_info[1], author_info[0]);
   }
   // Clear global string stream object for reuse
   line_.clear();
   infile_.close();
 }
 
-const Book LibraryManager::FindBook(std::string title) {
-  Book current_book;
-  LinkedList<Book>::iterator it;
+LibraryManager::BookPtrIterator LibraryManager::FindBook(std::string title) {
+  BookPtrIterator it;
   for (it = book_shelf_.Begin(); it != book_shelf_.End(); ++it) {
-    current_book = *it;
-    if (current_book.GetTitle() == title) {
-      break;
-    }
+    if ((*it)->GetTitle() == title) break;
   }
-  return current_book;
+  return it;
 }
 
 void LibraryManager::AddRecord() {
   int pages, edition;
   float length, width, height;
   std::string title, type;
-  std::string author_last_name, author_first_name;
-  std::string author_name;
   line_ >> length >> width >> height >> pages >> edition;
-  line_ >> author_last_name >> author_first_name;
   std::getline(line_, title);
   title = title.substr(1);
-  author_name = author_first_name + " " + author_last_name; 
-  Book book(pages, length, width, height, title, author_name);
-  book_shelf_.PushBack(book);
+  Book* book= new Book(pages, length, width, height, title);
+  std::unique_ptr<Book> book_ptr(book);
+  book_shelf_.PushBack(std::move(book_ptr));
 }
 
 void LibraryManager::LoanRecord() {
@@ -124,42 +115,42 @@ void LibraryManager::LoanRecord() {
   title = title.substr(1);
   borrower_name = borrower_first_name + " " + borrower_last_name;
   Date date(day, month, year);
-  Book current_book = FindBook(title);
-  current_book.SetBorrowerName(borrower_name);
-  current_book.SetDate(date);
-  current_book.SetIsLoaned(true);
-  loaned_books_.PushBack(current_book);
-  book_shelf_.Remove(current_book);
+  BookPtrIterator it = FindBook(title);
+  (*it)->SetBorrowerName(borrower_name);
+  (*it)->SetDate(date);
+  (*it)->SetIsLoaned(true);
+  loaned_books_.PushBack(std::move(*it));
+  book_shelf_.Erase(it);
 }
 
 void LibraryManager::ReturnRecord() {
   std::string title;
   std::getline(line_, title);
   title = title.substr(1);
-  Book current_book = FindBook(title);
-  current_book.SetIsLoaned(false);
-  book_shelf_.PushBack(current_book);
-  loaned_books_.Remove(current_book);
+  BookPtrIterator it = FindBook(title);
+  (*it)->SetIsLoaned(false);
+  book_shelf_.PushBack(std::move(*it));
+  loaned_books_.Erase(it);
 }
-
 
 void LibraryManager::Write() {
   int i = 1;
   int month, day, year;
   std::string previous_date;
-  Book book;
-  LinkedList<Book>::iterator it;
+  BookPtr book_ptr;
 
   outfile_.open("book_shelf.txt");
   outfile_ << book_shelf_.Size() << std::endl;
 
-  for (it = book_shelf_.Begin(); it != book_shelf_.End(); ++it) {
-    book = *it;
+  for (auto it = book_shelf_.Begin(); it != book_shelf_.End(); ++it) {
+    book_ptr = std::move(*it);
     outfile_ << i << ". ";
-    outfile_ << book.GetTitle() << " by " << book.GetAuthorName();
-    outfile_ << "(" << book.GetLength() << "x" << book.GetWidth();
-    outfile_ << "x" << book.GetHeight() << " in., ";
-    outfile_ << book.GetPages() << " pp.)" << std::endl;
+    outfile_ << book_ptr->GetTitle() << " by ";
+    const Author first_author = book_ptr->GetAuthors().front();
+    outfile_ << first_author;
+    outfile_ << "(" << book_ptr->GetLength() << "x" << book_ptr->GetWidth();
+    outfile_ << "x" << book_ptr->GetHeight() << " in., ";
+    outfile_ << book_ptr->GetPages() << " pp.)" << std::endl;
     i++;
   }
   outfile_ << std::endl << std::endl;
@@ -168,12 +159,12 @@ void LibraryManager::Write() {
   i = 1;
   outfile_.open("books_on_loan.txt");
   outfile_ << loaned_books_.Size() << std::endl;
-  for (it = loaned_books_.Begin(); it != loaned_books_.End(); ++it) {
-    book = *it;
-    month = book.GetDate().GetMonth();
-    day = book.GetDate().GetDay();
-    year = book.GetDate().GetYear();
-    if (previous_date != book.GetDate().GetDate()) {
+  for (auto it = loaned_books_.Begin(); it != loaned_books_.End(); ++it) {
+    book_ptr = std::move(*it);
+    month = book_ptr->GetDate().GetMonth();
+    day = book_ptr->GetDate().GetDay();
+    year = book_ptr->GetDate().GetYear();
+    if (previous_date != book_ptr->GetDate().GetDate()) {
       if (day < 10) {
         outfile_ << month << "/" << 0 << day << "/" << year << std::endl;
       } else {
@@ -181,18 +172,20 @@ void LibraryManager::Write() {
       }
     }
     outfile_ << i << ". ";
-    outfile_ << book.GetTitle() << " by " << book.GetAuthorName();
-    outfile_ << "(" << book.GetLength() << "x" << book.GetWidth();
-    outfile_ << "x" << book.GetHeight() << " in., ";
-    outfile_ << book.GetPages() << " pp.)" << std::endl;
-    previous_date = book.GetDate().GetDate();
+    outfile_ << book_ptr->GetTitle() << " by " << book_ptr->GetAuthorName();
+    outfile_ << "(" << book_ptr->GetLength() << "x" << book_ptr->GetWidth();
+    outfile_ << "x" << book_ptr->GetHeight() << " in., ";
+    outfile_ << book_ptr->GetPages() << " pp.)" << std::endl;
+    previous_date = book_ptr->GetDate().GetDate();
     i++;
   }
   outfile_.close();
 }
 
-bool LibraryManager::BookOrder(const Book& book1,
-                               const Book& book2) {
-  if (book1.GetTitle() <= book2.GetTitle()) return true;
+bool LibraryManager::BookOrder(const LibraryManager::BookPtr& book1,
+                               const LibraryManager::BookPtr& book2) {
+  const Author author1 = book1->GetAuthors()[0];
+  const Author author2 = book2->GetAuthors()[0];
+  if (author1 <= author2) return true;
   return false;
 }

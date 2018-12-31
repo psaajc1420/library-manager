@@ -1,6 +1,7 @@
 #ifndef LIBRARY_MANAGER_BOOK_H_
 #define LIBRARY_MANAGER_BOOK_H_
 
+#include <algorithm>
 #include <iostream>
 #include <string>
 
@@ -10,6 +11,8 @@
 
 class Book {
  public:
+  Book(Book&&);
+  const Book& operator=(Book&&);
   explicit Book(int pages=0, float length=0, float width=0, 
                 float height=0, std::string title="", 
                 std::string author_name="", std::string borrower_name="", 
@@ -28,6 +31,7 @@ class Book {
   const Borrower& GetBorrower() const;
   void AddAuthor(const Author&);
   void AddAuthor(const std::vector<Author>&);
+  void AddAuthor(std::string, std::string, std::string);
   std::string GetAuthorName() const;
   void SetAuthorName(const std::string);
   std::string GetBorrowerName() const;
@@ -36,13 +40,12 @@ class Book {
   Date GetDate() const;
   bool GetIsLoaned() const;
   void SetIsLoaned(bool);
-  
   int GetArea() const;          // get surface area of the book
-  void Print();                 // print out a book
 
   bool operator<= (const Book&) const;
   bool operator== (const Book&) const;
   friend std::ostream& operator<< (std::ostream&, const Book&);
+  friend std::ostream& operator<< (std::ostream&, const std::unique_ptr<Book>&);
   
  private: 
   int pages_;                    // number of pages in a book
@@ -53,12 +56,14 @@ class Book {
                                  // of return
   std::vector<Author> authors_;  // list of authors
   Borrower borrower_;            // borrower
+  UID uid_;
   std::string title_;            // title of a book
   std::string author_name_;      // name of the books author
   std::string borrower_name_;    // name of the borrower 
   bool is_loaned_;               // true if book is loaned out false otherwise
-};
 
+  void Init();
+};
 // Standard getters and setters
 inline int Book::GetPages() const { return pages_; }
 inline void Book::SetPages(int pages) { pages_ = pages; } 
@@ -85,5 +90,4 @@ inline Date Book::GetDate() const { return date_; }
 inline bool Book::GetIsLoaned() const { return is_loaned_; }
 inline void Book::SetIsLoaned(bool is_loaned) { is_loaned_ = is_loaned; }
 inline int Book::GetArea() const { return height_*width_; }
-
 #endif // LIBRARY_MANAGER_BOOK_H_
