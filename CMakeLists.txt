@@ -6,6 +6,7 @@ project(bookloans)
 
 # set flags for compiler
 set(CMAKE_CXX_FLAGS "-Wall -std=c++11")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -std=c++11 -g")
 
 # set important directories to variables
 set(bookloans_bin_dir "${CMAKE_SOURCE_DIR}/bin")

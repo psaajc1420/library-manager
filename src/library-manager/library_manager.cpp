@@ -115,12 +115,13 @@ void LibraryManager::LoanRecord() {
   title = title.substr(1);
   borrower_name = borrower_first_name + " " + borrower_last_name;
   Date date(day, month, year);
-  BookPtrIterator it = FindBook(title);
+  auto it = FindBook(title);
   (*it)->SetBorrowerName(borrower_name);
   (*it)->SetDate(date);
   (*it)->SetIsLoaned(true);
+  std::cout << *it << std::endl;
   loaned_books_.PushBack(std::move(*it));
-  book_shelf_.Erase(it);
+  // book_shelf_.Erase(it);
 }
 
 void LibraryManager::ReturnRecord() {
