@@ -11,8 +11,6 @@
 
 class Book {
  public:
-  Book(Book&&);
-  const Book& operator=(Book&&);
   explicit Book(int pages=0, float length=0, float width=0, 
                 float height=0, std::string title="", 
                 std::string author_name="", std::string borrower_name="", 

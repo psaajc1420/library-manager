@@ -23,7 +23,9 @@ class LibraryManager {
   void Open(std::string);
   // read contents of the file to call the apppropiate methods            
   void Read(int, char**);
-  void ReadBooks();
+  void ReadAddedBooks();
+  void ReadLoanedBooks();
+  void ReadReturnedBooks();
   void ReadAuthors();
   // add book to the bookshelf
   void AddRecord();       
@@ -38,7 +40,6 @@ class LibraryManager {
   static bool BookOrder(const BookPtr&,      
                         const BookPtr&);     
  private:
-  int records_;                               // number of records given
   std::ifstream infile_;                      // file object for reading files
   std::ofstream outfile_;                     // file object for writing files
   std::istringstream line_;                   // string stream object to parse lines

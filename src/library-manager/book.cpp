@@ -1,30 +1,5 @@
 #include "library-manager/book.h"
 
-Book::Book(Book&& book) {
-  SetPages(book.pages_);
-  SetLength(book.length_);
-  SetWidth(book.width_);
-  SetHeight(book.height_);
-  SetTitle(book.title_);
-  SetAuthorName(book.author_name_);
-  SetBorrowerName(book.borrower_name_);
-  SetIsLoaned(book.is_loaned_);
-}
-
-const Book& Book::operator=(Book&& book) {
-  if (this != &book) {
-    SetPages(book.pages_);
-    SetLength(book.length_);
-    SetWidth(book.width_);
-    SetHeight(book.height_);
-    SetTitle(book.title_);
-    SetAuthorName(book.author_name_);
-    SetBorrowerName(book.borrower_name_);
-    SetIsLoaned(book.is_loaned_);
-  }
-  return *this;
-}
-
 Book::Book(int pages, float length, float width, float height,
            std::string title, std::string author_name,
            std::string borrower_name, bool is_loaned) {
