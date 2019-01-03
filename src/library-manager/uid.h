@@ -9,6 +9,7 @@ class UID {
   UID() : id_(++next_id_) {}
   UID(const UID& orig) : id_(orig.id_) {}
   const UID& operator=(const UID&);  
+  bool operator== (const UID&) const;
  protected:
   static std::size_t next_id_;
 };
