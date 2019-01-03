@@ -1,23 +1,24 @@
 #include "library-manager/person.h"
 
-Person::Person(std::string name) {
-  SetName(name);
-}
-
-Person::Person(std::string first_name, std::string middle_name,
-               std::string last_name) {
-  SetFirstName(first_name);
-  SetMiddleName(middle_name);
-  SetLastName(last_name);
+std::string Person::GetName() const {
+  std::string name = last_name_;
+  if (first_name_ != "") {
+    name = first_name_ + " " + last_name_; 
+  }
+  if (middle_name_ != "") {
+    name = first_name_ + " " + middle_name_;
+    name += ". " + last_name_; 
+  }
+  return name;
 }
 
 bool Person::operator<= (const Person& author) const {
-  if(this->last_name_ <= author.last_name_ ) return true;
+  if (this->last_name_ <= author.last_name_ ) return true;
   return false;
 }
 
 bool Person::operator< (const Person& author) const {
-  if(this->last_name_ < author.last_name_ ) return true;
+  if (this->last_name_ < author.last_name_ ) return true;
   return false;
 }
 

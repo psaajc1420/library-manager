@@ -10,9 +10,9 @@
 
 class Author : public Person {
   public:
-    Author(UID);
-    Author(std::string first_name, std::string middle_name,
-           std::string last_name) 
+    explicit Author(UID book_id) : book_id_(book_id) {}
+    explicit Author(std::string first_name, std::string middle_name,
+                    std::string last_name) 
         : Person(first_name, middle_name, last_name) {}
     UID GetBookUid() const;
     void SetBookUid(UID);

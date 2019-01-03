@@ -13,8 +13,13 @@ class Book {
  public:
   explicit Book(int pages=0, float length=0, float width=0, 
                 float height=0, std::string title="", 
-                std::string author_name="", std::string borrower_name="", 
-                bool is_loaned=false);                
+                bool is_loaned=false)  
+      : pages_(pages), 
+        length_(length),
+        width_(width),
+        height_(height),
+        title_(title),
+        is_loaned_(is_loaned) {}     
   int GetPages() const ;
   void SetPages(int);
   float GetLength() const;
@@ -30,10 +35,7 @@ class Book {
   void AddAuthor(const Author&);
   void AddAuthor(const std::vector<Author>&);
   void AddAuthor(std::string, std::string, std::string);
-  std::string GetAuthorName() const;
-  void SetAuthorName(const std::string);
-  std::string GetBorrowerName() const;
-  void SetBorrowerName(const std::string);
+  void AddBorrower(std::string, std::string, std::string);
   void SetDate(const Date&);
   Date GetDate() const;
   bool GetIsLoaned() const;
@@ -47,20 +49,16 @@ class Book {
   
  private: 
   int pages_;                    // number of pages in a book
-  float height_;                 // height of a book
   float length_;                 // length of a book
   float width_;                  // width of a book
+  float height_;                 // height of a book
+  std::string title_;            // title of a book
+  bool is_loaned_;               // true if book is loaned out false otherwise
   Date date_;                    // date object that stores day, month and year
                                  // of return
   std::vector<Author> authors_;  // list of authors
   Borrower borrower_;            // borrower
   UID uid_;
-  std::string title_;            // title of a book
-  std::string author_name_;      // name of the books author
-  std::string borrower_name_;    // name of the borrower 
-  bool is_loaned_;               // true if book is loaned out false otherwise
-
-  void Init();
 };
 // Standard getters and setters
 inline int Book::GetPages() const { return pages_; }
@@ -73,14 +71,6 @@ inline float Book::GetHeight() const { return height_; }
 inline void Book::SetHeight(float height) { height_ = height; }
 inline std::string Book::GetTitle() const { return title_; }
 inline void Book::SetTitle(std::string title) { title_ = title; }
-inline std::string Book::GetAuthorName() const { return author_name_; }
-inline void Book::SetAuthorName(std::string author_name) { 
-  author_name_ = author_name; 
-}
-inline std::string Book::GetBorrowerName() const { return borrower_name_; }
-inline void Book::SetBorrowerName(std::string borrower_name) { 
-  borrower_name_ = borrower_name; 
-}
 inline const std::vector<Author>& Book::GetAuthors() const { return authors_; }
 inline const Borrower& Book::GetBorrower() const { return borrower_; }
 inline void Book::SetDate(const Date& date) { date_ = date; }

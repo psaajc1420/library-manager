@@ -127,19 +127,17 @@ void LibraryManager::AddRecord() {
 
 void LibraryManager::LoanRecord() {
   int month, day, year;
-  std::string title, borrower_name;
+  std::string title;
   std::string borrower_last_name, borrower_first_name;            
   line_ >> borrower_last_name >> borrower_first_name;
   line_ >> month >> day >> year;
   std::getline(line_, title);
   title = title.substr(1);
-  borrower_name = borrower_first_name + " " + borrower_last_name;
   Date date(day, month, year);
   auto it = FindBook(title);
-  (*it)->SetBorrowerName(borrower_name);
+  (*it)->AddBorrower(borrower_first_name, "", borrower_last_name);
   (*it)->SetDate(date);
   (*it)->SetIsLoaned(true);
-  std::cout << *it << std::endl;
   loaned_books_.PushBack(std::move(*it));
   book_shelf_.Erase(it);
 }
@@ -192,7 +190,8 @@ void LibraryManager::Write() {
     outfile_ << (*it)->GetTitle() << " by ";
     const Author first_author = (*it)->GetAuthors().front();
     outfile_ << first_author.GetLastName() << " ";
-    outfile_ << "(" << (*it)->GetLength() << "x" << (*it)->GetWidth();
+    outfile_ << "borrowed by " << (*it)->GetBorrower().GetName();
+    outfile_ << " (" << (*it)->GetLength() << "x" << (*it)->GetWidth();
     outfile_ << "x" << (*it)->GetHeight() << " in., ";
     outfile_ << (*it)->GetPages() << " pp.)" << std::endl;
     previous_date = (*it)->GetDate().GetDate();

@@ -1,18 +1,5 @@
 #include "library-manager/book.h"
 
-Book::Book(int pages, float length, float width, float height,
-           std::string title, std::string author_name,
-           std::string borrower_name, bool is_loaned) {
-  SetPages(pages);
-  SetLength(length);
-  SetWidth(width);
-  SetHeight(height);
-  SetTitle(title);
-  SetAuthorName(author_name);
-  SetBorrowerName(borrower_name);
-  SetIsLoaned(is_loaned);
-}
-
 void Book::AddAuthor(const std::vector<Author>& authors) {
   for (int i = 0; i < authors.size(); i++) {
     authors_.push_back(authors[i]);
@@ -31,11 +18,16 @@ void Book::AddAuthor(std::string first_name, std::string middle_name,
   std::sort(authors_.begin(), authors_.end());
 }
 
+void Book::AddBorrower(std::string first_name, std::string middle_name,
+                       std::string last_name) {
+  borrower_ = Borrower(first_name, middle_name, last_name);
+}
+
 bool Book::operator<= (const Book& book) const {
   if (is_loaned_) {
     std::string curr_date = book.GetDate().GetDate();
     std::string this_date = this->GetDate().GetDate();
-    if(this_date.compare(curr_date) < 0) {
+    if (this_date.compare(curr_date) < 0) {
       return true;
     }
   } else {
@@ -60,12 +52,12 @@ bool Book::operator== (const Book& book) const {
 std::ostream& operator<< (std::ostream& output, const Book& book) {
   output << "ID: " << book.uid_.id_ << std::endl;
   output << "Title: " << book.title_ << std::endl;
-  output << "Authors: " << book.author_name_ << std::endl;
+  output << "Authors: " << std::endl;
   const std::vector<Author> authors = book.GetAuthors();
   for (auto it = authors.begin(); it != authors.end(); ++it) {
     output << "   " << *it;
   }
-  output << "Borrower Name: " << book.borrower_name_ << std::endl;
+  output << "Borrower Name: " << book.borrower_.GetName() << std::endl;
   output << "Number of pages: " << book.pages_ << std::endl;
   output << "Length: " << book.length_ << std::endl;
   output << "Width: " << book.width_ << std::endl;
@@ -80,14 +72,12 @@ std::ostream& operator<< (std::ostream& output,
                           const std::unique_ptr<Book>& book_ptr) {
   output << "ID: " << book_ptr->uid_.id_ << std::endl;
   output << "Title: " << book_ptr->title_ << std::endl;
-  output << "Authors: " << book_ptr->author_name_ << std::endl;
+  output << "Authors: " << std::endl;
   const std::vector<Author> authors = book_ptr->GetAuthors();
   for (auto it = authors.begin(); it != authors.end(); ++it) {
-    output << "   ";
-    output << *it;
-    output << std::endl;
+    output << "   " << *it << std::endl;
   }
-  output << "Borrower Name: " << book_ptr->borrower_name_ << std::endl;
+  output << "Borrower Name: " << book_ptr->borrower_.GetName() << std::endl;
   output << "Number of pages: " << book_ptr->pages_ << std::endl;
   output << "Length: " << book_ptr->length_ << std::endl;
   output << "Width: " << book_ptr->width_ << std::endl;

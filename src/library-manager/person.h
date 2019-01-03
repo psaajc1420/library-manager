@@ -6,9 +6,11 @@
 
 class Person {
  public:
-  explicit Person(std::string name="");
-  explicit Person(std::string, std::string,
-                  std::string);
+  explicit Person(std::string name="") : name_(name) {}
+  explicit Person(std::string first_name, std::string middle_name,
+           std::string last_name) 
+      : first_name_(first_name), middle_name_(middle_name),
+        last_name_(last_name) {}
   std::string GetName() const;
   void SetName(std::string);
   std::string GetFirstName() const;
@@ -19,7 +21,6 @@ class Person {
   void SetLastName(std::string);
   static std::vector<std::string> ParseName();
   static std::string GetInitial(std::string);
-
   bool operator< (const Person&) const;
   bool operator<= (const Person&) const;
   friend std::ostream& operator<< (std::ostream&, const Person&);
@@ -29,8 +30,6 @@ class Person {
   std::string middle_name_;
   std::string last_name_;
 };
-
-inline std::string Person::GetName() const { return name_; }
 inline void Person::SetName(std::string name) { name_ = name; }
 inline std::string Person::GetFirstName() const { return first_name_; }
 inline void Person::SetFirstName(std::string first_name) { 
