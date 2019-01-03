@@ -45,8 +45,8 @@ void LibraryManager::Read(int num_files, char** files) {
     std::cerr << "Shouldn't be more than 2 files given as command line arguments";
     std::cout << std::endl;
   }
-  book_shelf_.Sort(BookOrder);
-  loaned_books_.Sort();
+  book_shelf_.Sort(BookShelfOrder);
+  loaned_books_.Sort(LoanedBookOrder);
 }
 
 void LibraryManager::ReadAddedBooks() {
@@ -54,7 +54,6 @@ void LibraryManager::ReadAddedBooks() {
   while (std::getline(infile_, line)) {
     line_.str(line);
     AddRecord();
-    // Clear global string stream object for reuse
     line_.clear();
   } 
   infile_.close();
@@ -65,7 +64,6 @@ void LibraryManager::ReadLoanedBooks() {
   while (std::getline(infile_, line)) {
     line_.str(line);
     LoanRecord();
-    // Clear global string stream object for reuse
     line_.clear();
   } 
   infile_.close();
@@ -76,7 +74,6 @@ void LibraryManager::ReadReturnedBooks() {
   while (std::getline(infile_, line)) {
     line_.str(line);
     ReturnRecord();
-    // Clear global string stream object for reuse
     line_.clear();
   } 
   infile_.close();
@@ -96,7 +93,6 @@ void LibraryManager::ReadAuthors() {
     it = FindBook(author_info[3]);
     (*it)->AddAuthor(author_info[2], author_info[1], author_info[0]);
   }
-  // Clear global string stream object for reuse
   line_.clear();
   infile_.close();
 }
@@ -134,7 +130,7 @@ void LibraryManager::LoanRecord() {
   std::getline(line_, title);
   title = title.substr(1);
   Date date(day, month, year);
-  auto it = FindBook(title);
+  BookPtrIterator it = FindBook(title);
   (*it)->AddBorrower(borrower_first_name, "", borrower_last_name);
   (*it)->SetDate(date);
   (*it)->SetIsLoaned(true);
@@ -155,7 +151,6 @@ void LibraryManager::ReturnRecord() {
 void LibraryManager::Write() {
   int i = 1;
   int month, day, year;
-  std::string previous_date;
   outfile_.open("book_shelf.txt");
   outfile_ << book_shelf_.Size() << std::endl;
 
@@ -173,12 +168,15 @@ void LibraryManager::Write() {
   outfile_.close();
 
   i = 1;
+  std::string previous_date = "";
   outfile_.open("books_on_loan.txt");
   outfile_ << loaned_books_.Size() << std::endl;
   for (auto it = loaned_books_.Begin(); it != loaned_books_.End(); ++it) {
     month = (*it)->GetDate().GetMonth();
     day = (*it)->GetDate().GetDay();
     year = (*it)->GetDate().GetYear();
+    std::cout << "Date: " << (*it)->GetDate().GetDate();
+    std::cout << std::endl;
     if (previous_date != (*it)->GetDate().GetDate()) {
       if (day < 10) {
         outfile_ << month << "/" << 0 << day << "/" << year << std::endl;
@@ -200,10 +198,22 @@ void LibraryManager::Write() {
   outfile_.close();
 }
 
-bool LibraryManager::BookOrder(const LibraryManager::BookPtr& book1,
-                               const LibraryManager::BookPtr& book2) {
+bool LibraryManager::BookShelfOrder(
+    const LibraryManager::BookPtr& book1,
+    const LibraryManager::BookPtr& book2) {
   const Author author1 = book1->GetAuthors()[0];
   const Author author2 = book2->GetAuthors()[0];
   if (author1 <= author2) return true;
+  return false;
+}
+
+bool LibraryManager::LoanedBookOrder(
+    const LibraryManager::BookPtr& book1,
+    const LibraryManager::BookPtr& book2) {
+  std::string book1_date = book1->GetDate().GetDate();
+  std::string book2_date = book1->GetDate().GetDate();
+  if (book1_date <= book2_date) {
+    return true;
+  }
   return false;
 }

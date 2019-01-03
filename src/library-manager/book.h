@@ -20,7 +20,7 @@ class Book {
         height_(height),
         title_(title),
         is_loaned_(is_loaned) {}     
-  int GetPages() const ;
+  int GetPages() const;
   void SetPages(int);
   float GetLength() const;
   void SetLength(float);
@@ -40,9 +40,8 @@ class Book {
   Date GetDate() const;
   bool GetIsLoaned() const;
   void SetIsLoaned(bool);
-  int GetArea() const;          // get surface area of the book
+  float GetArea() const;          // get surface area of the book
 
-  bool operator<= (const Book&) const;
   bool operator== (const Book&) const;
   friend std::ostream& operator<< (std::ostream&, const Book&);
   friend std::ostream& operator<< (std::ostream&, const std::unique_ptr<Book>&);
@@ -77,5 +76,5 @@ inline void Book::SetDate(const Date& date) { date_ = date; }
 inline Date Book::GetDate() const { return date_; }
 inline bool Book::GetIsLoaned() const { return is_loaned_; }
 inline void Book::SetIsLoaned(bool is_loaned) { is_loaned_ = is_loaned; }
-inline int Book::GetArea() const { return height_*width_; }
+inline float Book::GetArea() const { return height_*width_; }
 #endif // LIBRARY_MANAGER_BOOK_H_

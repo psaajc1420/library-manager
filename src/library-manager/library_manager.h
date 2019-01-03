@@ -37,8 +37,8 @@ class LibraryManager {
   // two seperate files            
   void Write();                           
    // boolean predicate for the book order on the bookshelf                                     
-  static bool BookOrder(const BookPtr&,      
-                        const BookPtr&);     
+  static bool BookShelfOrder(const BookPtr&, const BookPtr&);
+  static bool LoanedBookOrder(const BookPtr&, const BookPtr&);     
  private:
   std::ifstream infile_;                      // file object for reading files
   std::ofstream outfile_;                     // file object for writing files

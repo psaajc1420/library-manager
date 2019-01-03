@@ -23,31 +23,10 @@ void Book::AddBorrower(std::string first_name, std::string middle_name,
   borrower_ = Borrower(first_name, middle_name, last_name);
 }
 
-bool Book::operator<= (const Book& book) const {
-  if (is_loaned_) {
-    std::string curr_date = book.GetDate().GetDate();
-    std::string this_date = this->GetDate().GetDate();
-    if (this_date.compare(curr_date) < 0) {
-      return true;
-    }
-  } else {
-    if (book.GetArea() <= this->GetArea()) {
-      return true;
-    } else if (book.GetArea() == this->GetArea()) {
-      if (book.GetPages() <= this->GetPages()) {
-        return true;
-      }
-    }
-  }
-
-  return false; 
-}
-
 bool Book::operator== (const Book& book) const {
   if (this->GetTitle() == book.GetTitle()) return true;
   return false;
 }
-
 
 std::ostream& operator<< (std::ostream& output, const Book& book) {
   output << "ID: " << book.uid_.id_ << std::endl;
