@@ -19,8 +19,6 @@ class Person {
   void SetMiddleName(std::string);
   std::string GetLastName() const;
   void SetLastName(std::string);
-  static std::vector<std::string> ParseName();
-  static std::string GetInitial(std::string);
   bool operator< (const Person&) const;
   bool operator<= (const Person&) const;
   friend std::ostream& operator<< (std::ostream&, const Person&);

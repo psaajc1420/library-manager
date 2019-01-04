@@ -14,6 +14,9 @@ class Date {
   int GetMonth();
   void SetYear(int);
   int GetYear();
+
+  // Creates and string representation of a
+  // date backwards 
   std::string GetDate();
 
  private: 
@@ -21,8 +24,6 @@ class Date {
   int month_;
   int year_;
 };
-
-// Standard getters and setters
 inline void Date::SetDay(int day) { day_ = day; }
 inline int Date::GetDay() { return day_; }
 inline void Date::SetMonth(int month) { month_ = month; }

@@ -24,56 +24,36 @@ void LibraryManager::Open(std::string file_name) {
 void LibraryManager::Read(int num_files, char** files) {
   // Reduce by 1 to not include the executable
   num_files -= 1;
-  if(num_files == 0) {
-    Open();
-  } else if (num_files == 1) {
-    Open(files[1]);
-    ReadAddedBooks();
-  } else if (num_files == 2) {
-    Open(files[1]);
-    ReadAddedBooks();
-    Open(files[2]);
+  std::string book_types[3] = {"add", "loan", "return"};
+  if (num_files >= 0) {
+    if (num_files == 0) Open();
+    for (int i = 1; i <= num_files-1; i++) {
+      Open(files[i]);
+      ReadBooks(book_types[i-1]);
+    }
+    Open(files[num_files]);
     ReadAuthors();
-  } else if (num_files == 3) {
-    Open(files[1]);
-    ReadAddedBooks();
-    Open(files[2]);
-    ReadAuthors();
-    Open(files[3]);
-    ReadLoanedBooks();
+    book_shelf_.Sort(BookShelfOrder);
+    loaned_books_.Sort(LoanedBookOrder);
   } else {
     std::cerr << "Shouldn't be more than 2 files given as command line arguments";
     std::cout << std::endl;
   }
-  book_shelf_.Sort(BookShelfOrder);
-  loaned_books_.Sort(LoanedBookOrder);
 }
 
-void LibraryManager::ReadAddedBooks() {
+void LibraryManager::ReadBooks(std::string book_type) {
   std::string line, type;
   while (std::getline(infile_, line)) {
     line_.str(line);
-    AddRecord();
-    line_.clear();
-  } 
-  infile_.close();
-}
-
-void LibraryManager::ReadLoanedBooks() {
-  std::string line, type;
-  while (std::getline(infile_, line)) {
-    line_.str(line);
-    LoanRecord();
-    line_.clear();
-  } 
-  infile_.close();
-}
-
-void LibraryManager::ReadReturnedBooks() {
-  std::string line, type;
-  while (std::getline(infile_, line)) {
-    line_.str(line);
-    ReturnRecord();
+    if (book_type == "add") {
+      AddRecord();
+    } else if (book_type == "loan") { 
+      LoanRecord();
+    } else if (book_type == "return") {
+      ReturnRecord();
+    } else {
+      std::cout << "Something is wrong" << std::endl;
+    }
     line_.clear();
   } 
   infile_.close();
@@ -175,8 +155,6 @@ void LibraryManager::Write() {
     month = (*it)->GetDate().GetMonth();
     day = (*it)->GetDate().GetDay();
     year = (*it)->GetDate().GetYear();
-    std::cout << "Date: " << (*it)->GetDate().GetDate();
-    std::cout << std::endl;
     if (previous_date != (*it)->GetDate().GetDate()) {
       if (day < 10) {
         outfile_ << month << "/" << 0 << day << "/" << year << std::endl;
@@ -211,9 +189,7 @@ bool LibraryManager::LoanedBookOrder(
     const LibraryManager::BookPtr& book1,
     const LibraryManager::BookPtr& book2) {
   std::string book1_date = book1->GetDate().GetDate();
-  std::string book2_date = book1->GetDate().GetDate();
-  if (book1_date <= book2_date) {
-    return true;
-  }
+  std::string book2_date = book2->GetDate().GetDate();
+  if (book1_date <= book2_date) return true;
   return false;
 }

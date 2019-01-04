@@ -1,17 +1,5 @@
 #include "library-manager/book.h"
 
-void Book::AddAuthor(const std::vector<Author>& authors) {
-  for (int i = 0; i < authors.size(); i++) {
-    authors_.push_back(authors[i]);
-  }
-  std::sort(authors_.begin(), authors_.end());
-}
-
-void Book::AddAuthor(const Author& author) {
-  authors_.push_back(author);
-  std::sort(authors_.begin(), authors_.end());
-}
-
 void Book::AddAuthor(std::string first_name, std::string middle_name,
                      std::string last_name) {
   authors_.push_back(Author(first_name, middle_name, last_name));

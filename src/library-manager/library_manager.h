@@ -17,27 +17,38 @@ class LibraryManager {
   using BookPtrIterator = BookList::iterator;
 
  public:
-  // Open file by user input
+  // Opens a file and allows the user to input the files
   void Open();         
-  // Open file by file name                   
+
+  // Opens file by file name                   
   void Open(std::string);
-  // read contents of the file to call the apppropiate methods            
+
+  // reads contents of the file to call the apppropiate methods            
   void Read(int, char**);
-  void ReadAddedBooks();
-  void ReadLoanedBooks();
-  void ReadReturnedBooks();
+
+  // reads contents of the file to call the apppropiate methods 
+  void ReadBooks(std::string);
+
+  // reads contents of the file to call the apppropiate methods 
   void ReadAuthors();
+
   // add book to the bookshelf
-  void AddRecord();       
+  void AddRecord();     
+
   // loan book from the bookshelf                
   void LoanRecord(); 
+
   // return book to the bookshelf                     
   void ReturnRecord();
+
   // print the books on the bookshelf and loaned out in 
   // two seperate files            
   void Write();                           
-   // boolean predicate for the book order on the bookshelf                                     
+
+   // boolean predicate to order books on the bookshelf                               
   static bool BookShelfOrder(const BookPtr&, const BookPtr&);
+
+  // boolean predicate to order loaned books 
   static bool LoanedBookOrder(const BookPtr&, const BookPtr&);     
  private:
   std::ifstream infile_;                      // file object for reading files
