@@ -13,12 +13,15 @@ class Book {
  public:
   explicit Book(int pages=0, float length=0, float width=0,
                 float height=0, std::string title="",
+                std::string subject="", bool is_fiction=false,
                 bool is_loaned=false)
       : pages_(pages),
         length_(length),
         width_(width),
         height_(height),
         title_(title),
+        subject_(subject),
+        is_fiction_(is_fiction),
         is_loaned_(is_loaned) {}
   int GetPages() const;
   void SetPages(int);
@@ -30,12 +33,16 @@ class Book {
   void SetHeight(float);
   std::string GetTitle() const;
   void SetTitle(const std::string);
+  std::string GetSubject() const;
+  void SetSubject(const std::string);
+  bool GetIsLoaned() const;
+  void SetIsLoaned(bool);
+  bool GetIsFiction() const;
+  void SetIsFiction(bool);
   const std::vector<Author>& GetAuthors() const;
   const Borrower& GetBorrower() const;
   void SetDate(const Date&);
   Date GetDate() const;
-  bool GetIsLoaned() const;
-  void SetIsLoaned(bool);
 
   // Creates an author passing a first, middle, and last name
   void AddAuthor(std::string, std::string, std::string);
@@ -60,7 +67,9 @@ class Book {
   float width_;
   float height_;
   std::string title_;
+  std::string subject_;
   bool is_loaned_;
+  bool is_fiction_;
   Date date_;
   std::vector<Author> authors_;
   Borrower borrower_;
@@ -76,11 +85,15 @@ inline float Book::GetHeight() const { return height_; }
 inline void Book::SetHeight(float height) { height_ = height; }
 inline std::string Book::GetTitle() const { return title_; }
 inline void Book::SetTitle(std::string title) { title_ = title; }
+inline std::string Book::GetSubject() const { return subject_; }
+inline void Book::SetSubject(std::string subject) { subject_ = subject; }
+inline bool Book::GetIsLoaned() const { return is_loaned_; }
+inline void Book::SetIsLoaned(bool is_loaned) { is_loaned_ = is_loaned; }
+inline bool Book::GetIsFiction() const { return is_fiction_; }
+inline void Book::SetIsFiction(bool is_fiction) { is_fiction_ = is_fiction; }
+inline float Book::GetArea() const { return height_*width_; }
 inline const std::vector<Author>& Book::GetAuthors() const { return authors_; }
 inline const Borrower& Book::GetBorrower() const { return borrower_; }
 inline void Book::SetDate(const Date& date) { date_ = date; }
 inline Date Book::GetDate() const { return date_; }
-inline bool Book::GetIsLoaned() const { return is_loaned_; }
-inline void Book::SetIsLoaned(bool is_loaned) { is_loaned_ = is_loaned; }
-inline float Book::GetArea() const { return height_*width_; }
 #endif // LIBRARY_MANAGER_BOOK_H_

@@ -13,12 +13,12 @@ std::string Person::GetName() const {
 }
 
 bool Person::operator<= (const Person& author) const {
-  if (this->last_name_ <= author.last_name_ ) return true;
+  if (this->last_name_ <= author.last_name_) return true;
   return false;
 }
 
 bool Person::operator< (const Person& author) const {
-  if (this->last_name_ < author.last_name_ ) return true;
+  if (this->last_name_ < author.last_name_) return true;
   return false;
 }
 

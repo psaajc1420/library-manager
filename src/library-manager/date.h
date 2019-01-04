@@ -15,10 +15,8 @@ class Date {
   void SetYear(int);
   int GetYear();
 
-  // Creates and string representation of a
-  // date backwards 
+  // Creates a string representation of a date 
   std::string GetDate();
-
  private: 
   int day_;
   int month_;

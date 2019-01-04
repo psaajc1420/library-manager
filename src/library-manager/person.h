@@ -8,7 +8,7 @@ class Person {
  public:
   explicit Person(std::string name="") : name_(name) {}
   explicit Person(std::string first_name, std::string middle_name,
-           std::string last_name) 
+                  std::string last_name) 
       : first_name_(first_name), middle_name_(middle_name),
         last_name_(last_name) {}
   std::string GetName() const;
@@ -22,7 +22,7 @@ class Person {
   bool operator< (const Person&) const;
   bool operator<= (const Person&) const;
   friend std::ostream& operator<< (std::ostream&, const Person&);
- protected:
+ private:
   std::string name_;
   std::string first_name_;
   std::string middle_name_;
