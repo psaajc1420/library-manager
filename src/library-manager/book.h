@@ -21,8 +21,8 @@ class Book {
         height_(height),
         title_(title),
         subject_(subject),
-        is_fiction_(is_fiction),
-        is_loaned_(is_loaned) {}
+        is_loaned_(is_loaned),
+        is_fiction_(is_fiction) {}
   int GetPages() const;
   void SetPages(int);
   float GetLength() const;
