@@ -68,37 +68,40 @@ class LibraryManager {
   // ./{}.out book_list.txt author_list.txt loaned_list.txt return_list.txt
   void FindAvailableTypes(int);
 
-  // print the books on the bookshelf and loaned out in
+  // Prints the books on the bookshelf and loaned out in
   // two seperate files
   void Write();
 
-  // boolean predicate to order books on the bookshelf
-  static bool BookShelfOrder(const BookPtr&, const BookPtr&);
-
-  // boolean predicate to order loaned books
-  static bool LoanedBookOrder(const BookPtr&, const BookPtr&);     
+  static bool CompareByAuthor(const BookPtr&, const BookPtr&);
+  static bool CompareByTitle(const BookPtr&, const BookPtr&);
+  static bool CompareBySubject(const BookPtr&, const BookPtr&);
+  static bool CompareByFiction(const BookPtr&, const BookPtr&);
+  static bool CompareByDate(const BookPtr&, const BookPtr&);
+  static bool CompareBySubjectAndTitle(const BookPtr&, const BookPtr&);
+  static bool CompareBySubjectAndAuthor(const BookPtr&, const BookPtr&);
+  static bool CompareByFictionAndTitle(const BookPtr&, const BookPtr&);
  private:
-  // file object for reading files
+  // File object for reading files
   std::ifstream infile_;
 
-  // file object for writing files
+  // File object for writing files
   std::ofstream outfile_;
 
-   // string stream object to parse lines
+   // String stream object to parse lines
   std::istringstream line_;
 
-  // map whose key value pair represents the line read
+  // Map whose key value pair represents the line read
   // in and a vector of all the information in that
   // line respectively.
   BookInfoMap file_info_;
 
-  // vector of reading options provided by the client
+  // Vector of reading options provided by the client
   std::vector<ReadType> read_types_;
 
-  // list that contains the books on the shelf
+  // List that contains the books on the shelf
   BookList book_shelf_;  
 
-  // list that contains the loaned books                     
+  // List that contains the loaned books                     
   BookList loaned_books_;       
 
   // Returns an iterator that contains the book smart pointer

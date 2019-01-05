@@ -32,12 +32,12 @@ void LibraryManager::Read(int num_files, char** files) {
       AddBookInfo(read_types_[i-1]);
       file_info_.clear();
     }
-    book_shelf_.Sort(BookShelfOrder);
-    loaned_books_.Sort(LoanedBookOrder);
+    book_shelf_.Sort(CompareByFictionAndTitle);
+    loaned_books_.Sort(CompareByDate);
   } else if (num_files == 0) {
     Open();
   } else {
-    std::cerr << "Shouldn't be more than 2 files given as command line arguments";
+    std::cerr << "The number of files can't be negative";
     std::cout << std::endl;
   }
 }
@@ -118,8 +118,13 @@ void LibraryManager::AddRecords() {
     float height = std::stof(it_file.second[2]);
     int pages = std::stoi(it_file.second[3]);
     int edition = std::stoi(it_file.second[4]);
-    std::string title = it_file.second[5];
-    Book* book = new Book(pages, length, width, height, title);
+    std::string subject = it_file.second[5];
+    std::string fiction_str = it_file.second[6];
+    bool fiction = false;
+    if (fiction_str == "fiction") fiction = true;
+    std::string title = it_file.second[7];
+    Book* book = new Book(pages, edition, length, width, height, 
+                          title, subject, fiction);
     std::unique_ptr<Book> book_ptr(book);
     book_shelf_.PushBack(std::move(book_ptr));
   }
@@ -202,7 +207,7 @@ void LibraryManager::Write() {
   outfile_.close();
 }
 
-bool LibraryManager::BookShelfOrder(
+bool LibraryManager::CompareByAuthor(
     const LibraryManager::BookPtr& book1,
     const LibraryManager::BookPtr& book2) {
   const Author author1 = book1->GetAuthors()[0];
@@ -211,11 +216,81 @@ bool LibraryManager::BookShelfOrder(
   return false;
 }
 
-bool LibraryManager::LoanedBookOrder(
+bool LibraryManager::CompareByDate(
     const LibraryManager::BookPtr& book1,
     const LibraryManager::BookPtr& book2) {
   std::string book1_date = book1->GetDate().GetDate();
   std::string book2_date = book2->GetDate().GetDate();
   if (book1_date <= book2_date) return true;
+  return false;
+}
+
+bool LibraryManager::CompareByTitle(
+    const LibraryManager::BookPtr& book1,
+    const LibraryManager::BookPtr& book2) {
+  std::string book1_title = book1->GetTitle(); 
+  std::string book2_title = book2->GetTitle(); 
+  if (book1_title <= book2_title) return true;
+  return false;
+}
+
+bool LibraryManager::CompareBySubject(
+    const LibraryManager::BookPtr& book1,
+    const LibraryManager::BookPtr& book2) {
+  std::string book1_subject = book1->GetSubject();
+  std::string book2_subject = book2->GetSubject();
+  if (book1_subject <= book2_subject) return true;
+  return false;   
+}
+
+bool LibraryManager::CompareBySubjectAndTitle(
+    const LibraryManager::BookPtr& book1,
+    const LibraryManager::BookPtr& book2) {
+  std::string book1_subject = book1->GetSubject();
+  std::string book2_subject = book2->GetSubject();
+  std::string book1_title = book1->GetTitle(); 
+  std::string book2_title = book2->GetTitle(); 
+  if (book1_subject == book2_subject) {
+    if (book1_title <= book2_title) {
+      return true;
+    }
+  } else if (book1_subject < book2_subject) {
+    return true;
+  }
+  return false;
+}
+
+bool LibraryManager::CompareBySubjectAndAuthor(
+    const LibraryManager::BookPtr& book1,
+    const LibraryManager::BookPtr& book2) {
+  std::string book1_subject = book1->GetSubject();
+  std::string book2_subject = book2->GetSubject();
+  const Author author1 = book1->GetAuthors()[0];
+  const Author author2 = book2->GetAuthors()[0];
+  if (book1_subject == book2_subject) {
+    if (author1 <= author2) {
+      return true;
+    }
+  } else if (book1_subject < book2_subject) {
+    return true;
+  }
+  return false;
+}
+
+bool LibraryManager::CompareByFictionAndTitle(
+    const LibraryManager::BookPtr& book1,
+    const LibraryManager::BookPtr& book2) {
+  bool book1_is_fiction = book1->GetIsFiction();
+  bool book2_is_fiction = book2->GetIsFiction();
+  std::string book1_title = book1->GetTitle(); 
+  std::string book2_title = book2->GetTitle(); 
+  if ((book1_is_fiction && book2_is_fiction) ||
+      (!book1_is_fiction && !book2_is_fiction)) {
+    if (book1_title <= book2_title) {
+      return true;
+    }
+  } else if (book1_is_fiction && !book2_is_fiction) {
+    return true;
+  }
   return false;
 }

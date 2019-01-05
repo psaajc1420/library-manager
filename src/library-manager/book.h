@@ -11,20 +11,23 @@
 
 class Book {
  public:
-  explicit Book(int pages=0, float length=0, float width=0,
-                float height=0, std::string title="",
+  explicit Book(int pages=0, int edition=0, float length=0,
+                float width=0, float height=0, std::string title="",
                 std::string subject="", bool is_fiction=false,
                 bool is_loaned=false)
       : pages_(pages),
+        edition_(edition),
         length_(length),
         width_(width),
         height_(height),
         title_(title),
         subject_(subject),
-        is_loaned_(is_loaned),
-        is_fiction_(is_fiction) {}
+        is_fiction_(is_fiction),
+        is_loaned_(is_loaned) {}
   int GetPages() const;
   void SetPages(int);
+  int GetEdition() const;
+  void SetEdition(int);
   float GetLength() const;
   void SetLength(float);
   float GetWidth() const;
@@ -52,24 +55,28 @@ class Book {
 
   // Calculates the area of a book by multiplying
   // the length and width.
-  float GetArea() const;          
+  float GetArea() const;
+
+  // Calculates the volume of a book
+  float GetVolume() const;
 
   // Shows equivalence of two books by comparing book titles
   bool operator== (const Book&) const;
   
-  // Overload stream extraction operators to display 
+  // Overload stream extraction operators to display
   // book content
   friend std::ostream& operator<< (std::ostream&, const Book&);
-  friend std::ostream& operator<< (std::ostream&, const std::unique_ptr<Book>&);  
- private: 
+  friend std::ostream& operator<< (std::ostream&, const std::unique_ptr<Book>&);
+ private:
   int pages_;
+  int edition_;
   float length_;
   float width_;
   float height_;
   std::string title_;
   std::string subject_;
-  bool is_loaned_;
   bool is_fiction_;
+  bool is_loaned_;
   Date date_;
   std::vector<Author> authors_;
   Borrower borrower_;
@@ -77,6 +84,8 @@ class Book {
 };
 inline int Book::GetPages() const { return pages_; }
 inline void Book::SetPages(int pages) { pages_ = pages; }
+inline int Book::GetEdition() const { return edition_; }
+inline void Book::SetEdition(int edition) { edition_ = edition; }
 inline float Book::GetLength() const { return length_; }
 inline void Book::SetLength(float length) { length_ = length; }
 inline float Book::GetWidth() const { return width_; }
@@ -92,6 +101,7 @@ inline void Book::SetIsLoaned(bool is_loaned) { is_loaned_ = is_loaned; }
 inline bool Book::GetIsFiction() const { return is_fiction_; }
 inline void Book::SetIsFiction(bool is_fiction) { is_fiction_ = is_fiction; }
 inline float Book::GetArea() const { return height_*width_; }
+inline float Book::GetVolume() const { return length_*width_*height_; }
 inline const std::vector<Author>& Book::GetAuthors() const { return authors_; }
 inline const Borrower& Book::GetBorrower() const { return borrower_; }
 inline void Book::SetDate(const Date& date) { date_ = date; }
