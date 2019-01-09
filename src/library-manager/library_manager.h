@@ -24,6 +24,10 @@ class LibraryManager {
     kAddBook, kAddAuthor, kLoanBook, kReturnBook
   };
  public:
+  // Reads the files given by the client through user input from
+  // the terminal/command prompt.
+  void Read();
+  
   // Reads all files given via the command line. If no arguments
   // are given force the client to give the files to read.
   void Read(int, char**);

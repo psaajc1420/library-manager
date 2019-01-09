@@ -18,7 +18,22 @@ void LibraryManager::Open(std::string file_name) {
   infile_.open(file_name);    
   if (!infile_) {
     std::cerr << "Error: file can't be opened as it was not found." << std::endl;
+  } 
+}
+
+void LibraryManager::Read() {
+  int num_files;
+  std::cout << "How many files do you want to read? ";
+  std::cin >> num_files;
+  FindAvailableTypes(num_files);
+  for (int i = 0; i < num_files; i++) {
+    Open();
+    ParseFile();
+    AddBookInfo(read_types_[i-1]);
+    file_info_.clear();
   }
+  book_shelf_.Sort(CompareByFictionAndTitle);
+  loaned_books_.Sort(CompareByDate);
 }
 
 void LibraryManager::Read(int num_files, char** files) {
