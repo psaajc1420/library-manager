@@ -2,6 +2,7 @@
 #define LIBRARY_MANAGER_LIBRARY_MANAGER_H_
 
 #include <fstream>
+#include <stdexcept>
 #include <string>
 #include <sstream>
 #include <unordered_map>
@@ -24,12 +25,21 @@ class LibraryManager {
     kAddBook, kAddAuthor, kLoanBook, kReturnBook
   };
  public:
+  LibraryManager() {}
+
+  // Calls the read function with a command line like signature
+  // Read(int, char**)
+  LibraryManager(int, char**);
+
   // Reads the files given by the client through user input from
   // the terminal/command prompt.
   void Read();
   
   // Reads all files given via the command line. If no arguments
   // are given force the client to give the files to read.
+  //
+  // Throws a runtime error exception if the number of files
+  // given is not greater than zero.
   void Read(int, char**);
 
   // Prints the books on the bookshelf and loaned out in
@@ -71,8 +81,9 @@ class LibraryManager {
    // Opens a file and allows the user to input the files
   void Open();
 
-  // Opens file by file name
-  void Open(std::string); 
+  // Opens file by file name. Throws a runtime error exception 
+  // if file is not found
+  void Open(std::string);
 
   // Add books to the book shelf
   void AddRecords();

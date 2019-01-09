@@ -1,5 +1,13 @@
 #include "library-manager/library_manager.h"
 
+LibraryManager::LibraryManager(int num_files, char** files) {
+  try {
+    Read(num_files, files);
+  } catch (std::exception& e) {
+    std::cout << e.what() << std::endl;
+  }    
+}
+
 void LibraryManager::Open() {
   std::string file_name;
   while (true) {
@@ -17,7 +25,7 @@ void LibraryManager::Open() {
 void LibraryManager::Open(std::string file_name) {
   infile_.open(file_name);    
   if (!infile_) {
-    std::cerr << "Error: file can't be opened as it was not found." << std::endl;
+    throw std::runtime_error("Error: file can't be opened as it was not found.");
   } 
 }
 
@@ -42,18 +50,20 @@ void LibraryManager::Read(int num_files, char** files) {
   if (num_files > 0) {
     FindAvailableTypes(num_files);
     for (int i = 1; i <= read_types_.size(); i++) {
-      Open(files[i]);
+      try {
+        Open(files[i]);
+      } catch (std::exception& e) {
+        std::cout << e.what() << std::endl;
+      }     
       ParseFile();
       AddBookInfo(read_types_[i-1]);
       file_info_.clear();
     }
     book_shelf_.Sort(CompareByFictionAndTitle);
     loaned_books_.Sort(CompareByDate);
-  } else if (num_files == 0) {
-    Open();
   } else {
-    std::cerr << "The number of files can't be negative";
-    std::cout << std::endl;
+    throw std::runtime_error(
+      "Error: the number files given can't be negative or zero");
   }
 }
 
