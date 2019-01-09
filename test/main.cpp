@@ -1,7 +1,5 @@
 #include "library-manager/library_manager.h"
 
-namespace {
-
 int main(int argc, char** argv) {
 
     LibraryManager* manager;
@@ -13,6 +11,4 @@ int main(int argc, char** argv) {
     delete manager;
 
     return 0;
-}
-
 }
