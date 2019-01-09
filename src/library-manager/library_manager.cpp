@@ -101,7 +101,7 @@ void LibraryManager::AddBookInfo(ReadType type) {
 }
 
 void LibraryManager::AddAuthor() {
-  for (auto& it_file: file_info_) {
+  for (auto& it_file : file_info_) {
     std::string last_name = it_file.second[0]; 
     std::string middle_name = it_file.second[1]; 
     std::string first_name = it_file.second[2];
@@ -112,7 +112,7 @@ void LibraryManager::AddAuthor() {
 }
 
 void LibraryManager::AddRecords() {
-  for (auto& it_file: file_info_) {
+  for (auto& it_file : file_info_) {
     float length = std::stof(it_file.second[0]);
     float width = std::stof(it_file.second[1]);
     float height = std::stof(it_file.second[2]);
@@ -131,7 +131,7 @@ void LibraryManager::AddRecords() {
 }
 
 void LibraryManager::LoanRecords() {
-  for (auto& it_file: file_info_) {
+  for (auto& it_file : file_info_) {
     std::string last_name = it_file.second[0]; 
     std::string middle_name = it_file.second[1]; 
     std::string first_name = it_file.second[2];
@@ -150,7 +150,7 @@ void LibraryManager::LoanRecords() {
 }
 
 void LibraryManager::ReturnRecords() {
-  for (auto& it_file: file_info_) {
+  for (auto& it_file : file_info_) {
     std::string title = it_file.second[0];
     BookPtrIterator it = FindBook(title);
     (*it)->SetIsLoaned(false);
