@@ -5,7 +5,7 @@ int main(int argc, char** argv) {
     LibraryManager* manager;
 
     manager = new LibraryManager();
-    manager->Read(argc, argv);
+    manager->Read(--argc, argv);
     manager->Write();
 
     delete manager;

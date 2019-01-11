@@ -80,15 +80,14 @@ void LibraryManager::ParseFile() {
   std::string line;
   int key = 0;
   while (std::getline(infile_, line)) {
-    line_.str(line);
-    std::size_t found = 0;
+    std::size_t found = line.find('\r');
+    if (found != std::string::npos) line = line.substr(0, found);
     for (int i = 0; found != std::string::npos; i++) {
       found = line.find(',');
       file_info_[key].push_back(line.substr(0,found));
       line = line.substr(found+1);
     }
     key++;
-    line_.clear();
   } 
   infile_.close();
 }
