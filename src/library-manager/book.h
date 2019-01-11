@@ -62,11 +62,6 @@ class Book {
 
   // Shows equivalence of two books by comparing book titles
   bool operator== (const Book&) const;
-  
-  // Overload stream extraction operators to display
-  // book content
-  friend std::ostream& operator<< (std::ostream&, const Book&);
-  friend std::ostream& operator<< (std::ostream&, const std::unique_ptr<Book>&);
  private:
   int pages_;
   int edition_;

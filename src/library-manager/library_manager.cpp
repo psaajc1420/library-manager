@@ -1,11 +1,7 @@
 #include "library-manager/library_manager.h"
 
 LibraryManager::LibraryManager(int num_files, char** files) {
-  try {
-    Read(num_files, files);
-  } catch (std::exception& e) {
-    std::cout << e.what() << std::endl;
-  }    
+  Read(num_files, files);
 }
 
 void LibraryManager::Open() {
@@ -45,8 +41,6 @@ void LibraryManager::Read() {
 }
 
 void LibraryManager::Read(int num_files, char** files) {
-  // Reduce by 1 to not include the executable
-  num_files -= 1;
   if (num_files > 0) {
     FindAvailableTypes(num_files);
     for (int i = 1; i <= read_types_.size(); i++) {

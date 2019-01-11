@@ -6,9 +6,11 @@
     Unit tests for my implementation of a list
 */
 
+#include "linked_list.h"
+
 #include <limits.h>
 #include <iostream>
-#include "linked_list.h"
+
 #include "gtest/gtest.h"
 
 namespace {
